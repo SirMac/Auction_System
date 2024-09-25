@@ -1,0 +1,271 @@
+
+.container_main {
+  text-align: center;
+  border-radius: 7px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.container_main .registration {
+  width: 80%;
+  text-align: center;
+  margin: 0 auto !important;
+}
+
+.container_main .form {
+  padding: 2rem;
+}
+
+.container_main .form header {
+  font-size: 2rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.form input {
+  height: 40px;
+  width: 300px;
+  padding: 0 15px;
+  font-size: 17px;
+  margin-bottom: 1.3rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.container_main .form input:focus {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.container_main .form a {
+  font-size: 16px;
+  color: #009579;
+  text-decoration: none;
+}
+
+.container_main .form a:hover {
+  text-decoration: underline;
+}
+
+.container_main .form .button {
+  color: #fff;
+  background: #009579;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-top: 1.7rem;
+  cursor: pointer;
+  transition: 0.4s;
+  height: 45px;
+  width: 200px;
+  padding: 0 15px;
+  font-size: 17px;
+  margin-bottom: 1.3rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+}
+
+.container_main .form .button:hover {
+  background: #006653;
+}
+
+
+.form-flex {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  
+  justify-content:space-between;
+}
+
+
+
+.upper {
+    text-transform: uppercase;
+  
+}
+
+ ::-webkit-input-placeholder { /* WebKit browsers */
+  text-transform: none;
+}
+ :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  text-transform: none;
+}
+ ::-moz-placeholder { /* Mozilla Firefox 19+ */
+  text-transform: none;
+}
+ :-ms-input-placeholder { /* Internet Explorer 10+ */
+  text-transform: none;
+}
+ ::placeholder { /* Recent browsers */
+  text-transform: none;
+}
+
+
+.addContact {
+  margin-bottom: 50px;
+}
+
+
+.table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.table tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+ a {
+  text-decoration: none;
+}
+
+ .button {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 17px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+}
+
+.bg-cyan{
+  background-color: #006653;
+}
+
+.bg-brown{
+  background-color: brown;
+}
+
+.bg-light {
+  background-color: #c2e7ff !important;
+  color: black !important;
+}
+
+
+.table .deleteButton {
+  background-color: brown;
+}
+
+.table .detailButton {
+  background-color: blue;
+}
+
+.center {
+  text-align: center;
+}
+
+
+.ptop-8 {
+  padding-top: 8px !important;
+}
+
+
+
+
+
+.rc-sidenav {
+  width: min-content;
+  position: fixed;
+  /* z-index: 1; */
+  /* top: 20px; */
+  /* left: 10px; */
+  background: #eee;
+  overflow-x: hidden;
+  padding: 8px 0;
+  margin-bottom: 50px;
+}
+
+.rc-sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 14px !important;
+  color: #2196F3;
+  display: block;
+}
+
+.rc-sidenav a:hover {
+  color: #064579;
+}
+
+.rc-main {
+  margin-left: 410px; 
+  margin-right: 20px;
+  font-size: 14px !important; 
+  padding: 0px 10px;
+  text-align: center;
+}
+
+@media screen and (max-height: 450px) {
+  .rc-sidenav {padding-top: 15px;}
+  .rc-sidenav a {font-size: 18px;}
+}
+
+.success {
+  color:#006653;
+  font-weight: bold;
+}
+
+
+ .error {
+  color: brown;
+}
+
+
+
+
+/* The Modal (background) */
+.cmodal {
+  display: none; 
+  position: fixed; 
+  z-index: 10; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.5); 
+}
+
+
+.cmodal .modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%; 
+  text-align: center;
+}
+
+
+.cmodal .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+
+.display-none {
+  display: none;
+}

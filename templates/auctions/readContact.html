@@ -1,0 +1,53 @@
+{#% extends "base.html" %#}
+
+
+
+{% block content %}
+<div class="addContact_ container_main rc-sidenav">
+
+  <div class="form">
+    <header>Read Contact</header>
+    <form action="{% url 'auctions:index' %}" method="get">
+      {#% csrf_token %#}
+      <div class="form-flex_" id="form-inputs">
+        <input type="text" name="firstname" placeholder="First Name">
+        <input type="text" name="lastname" placeholder="Last Name">
+        <input type="text" name="email" placeholder="Email Address">
+      </div>
+      <input type="text" value="no" name="readall" hidden id="readall_hidden">
+      <input style="margin: 0 !important; width: 50px;height: 20px; text-align: left;" type="checkbox" 
+        id="checkbox" value="no"><label for="checkbox">Read all</label>  
+      <button type="submit" class="button">Search Contact</button>
+    </form>
+  </div>
+</div>
+
+<div class="rc-main">
+  {% include "auctions/message.html" %}
+  
+</div>
+
+
+
+<script>
+  let readall = document.getElementById('checkbox');
+  readall && (readall.onchange = function (e) {
+    let checked = e.target.checked
+    let formElements = document.getElementById('form-inputs')
+    formElements.style.display = '';
+    document.getElementById('readall_hidden').value = 'no'
+    if (checked) {
+      resetValue(formElements.children)
+      formElements.style.display = 'none';
+      document.getElementById('readall_hidden').value = 'yes'
+    }
+    console.log(e.target.checked)
+  })
+
+  function resetValue(formElements) {
+    for (element of formElements) {
+      element.value = ''
+    }
+  }
+</script>
+{% endblock %}

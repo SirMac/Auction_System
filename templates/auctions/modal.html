@@ -1,0 +1,22 @@
+<div id="contact-modal" class="cmodal">
+    <div class="modal-content">
+        <span class="close close-modal">&times;</span>
+        
+        {% block content %}{% endblock %}
+        
+    </div>
+</div>
+
+
+
+<script>
+    var modal = document.getElementById("contact-modal");
+    var closeModal = document.getElementsByClassName("close-modal");
+    
+    for(let element of closeModal){
+        element.onclick = function () {
+            modal.style.display = "none";
+        }
+    }
+
+</script>

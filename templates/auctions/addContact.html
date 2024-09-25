@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="addContact container_main">
+  <div class="registration form">
+    <header>Create Contact</header>
+    <form action="{% url 'auctions:createContact' %}" method="post">
+      {% csrf_token %}
+      <div class="form-flex">
+        <input type="text" required name="firstname" placeholder="First Name">
+        <input type="text" required name="lastname" placeholder="Last Name">
+        <input type="text" required name="company" placeholder="Company">
+        <input type="text" required name="phone" id="phone" placeholder="Phone Number">
+        <input type="text" required name="email" placeholder="Email Address">
+        <input type="text" required name="website" id="website" placeholder="Website Address (http(s)://x.x)">
+        <input type="number" required name="unitNumber" placeholder="Unit Number">
+        <input type="number" required name="civicNumber" placeholder="Civic Number">
+        <input type="text" required name="street" placeholder="Street Code">
+        <input type="text" required name="city" placeholder="City">
+        <input type="text" required name="province" class="upper" maxlength="2" placeholder="Province (QC)">
+        <input type="text" required name="postalCode" class="upper" maxlength="3"
+          placeholder="Postal Code (A1A or 1A1)">
+      </div>
+
+      {% include "auctions/message.html" %}
+
+      <button type="submit" class="button">Add Contact</button>
+    </form>
+  </div>
+</div>
+
+<script src="{% static 'js/imask.js' %}"></script>
+<script>
+  const phone = document.getElementById('phone');
+  const maskOptions = {
+    mask: '+1 (000) 000-0000'
+  };
+  phone && IMask(phone, maskOptions);
+</script>
+
+{% endblock %}

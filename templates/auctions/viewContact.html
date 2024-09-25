@@ -1,0 +1,46 @@
+
+<table class="table">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th class="center" colspan="3">Manage Contact</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for contact in contacts %}
+      <tr>
+        <td>{{ contact.firstName }}</td>
+        <td>{{ contact.lastName }}</td>
+        <td>{{ contact.email }}</td>
+
+        <td class="center"><a class="button bg-cyan" 
+            id="detailContact{{contact.id}}"
+            href="{% url 'auctions:detailContact' contact.id %}">
+            detail
+          </a></td>
+
+        <td class="center"><a class="button bg-cyan" 
+            id="updateContact{{contact.id}}"
+            href="{% url 'auctions:updateContact' contact.id %}">
+            update
+          </a></td>
+
+        <td class="center delete-contact" 
+          contactID="{{contact.id}}"
+          contactName="{{contact.firstName}} {{contact.lastName}}"
+        >
+            <a class="button bg-brown" 
+              id="deleteContact{{contact.id}}"
+              href="#"
+            >
+            delete
+          </a></td>
+
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+

@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <title>Auction System</title>
+</head>
+
+<body>
+  <nav>
+    <div class="nav__header">
+      <div class="nav__logo">
+        <a href="#" class="logo">Auction App</a>
+      </div>
+      <div class="nav__menu__btn" id="menu-btn">
+        <i class="ri-menu-line"></i>
+      </div>
+    </div>
+    <ul class="nav__links" id="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#product">Products</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav__search" id="nav-search">
+      <input type="text" placeholder="Search" />
+      <span><i class="ri-search-2-line"></i></span>
+    </div>
+  </nav>
+
+  <header class="section__container header__container" id="home">
+    <div class="header__image">
+      <img src="{% static 'images/header.jpg' %}" alt="header" />
+    </div>
+    <div class="header__content">
+      <div>
+        <h1>Your No. 1 Stop For Auctions</h1>
+        <p>
+          We will help you to make an elegant and luxurious interior designed
+          by professional interior designer.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  {% block content %}{% endblock %}
+
+  <footer class="footer" id="contact">
+      <div class="footer__bar">
+        Copyright © 2024 ENCS-691 Fall-2024 Project
+      </div>
+  </footer>
+
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- <script src="main.js"></script> -->
+</body>
+
+</html>
