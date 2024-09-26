@@ -36,7 +36,7 @@ def authenticateUser(req):
         return redirect('users:login')
     
     login(req, user)
-    return redirect('contacts:index')
+    return redirect('auctions:index')
 
 
 @loggedIn

@@ -11,6 +11,7 @@ class Item(models.Model):
     status = models.CharField(max_length=200)
     minimumbid = models.IntegerField()
     username = models.CharField(max_length=200)
+    image = models.CharField(max_length=200)
     createdat = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

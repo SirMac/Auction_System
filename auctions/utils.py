@@ -2,59 +2,45 @@ from django.shortcuts import render, redirect
 from django.contrib.messages import error, success
 from django.urls import reverse
 from .auctionValidators import ValidateAuction
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 from .models import Item
 import logging
 
-def addNewAuction(req):
-    firstName = req.POST['firstname']
-    lastName = req.POST['lastname']
-    company = req.POST['company']
-    phone = req.POST['phone']
-    email = req.POST['email']
-    website = req.POST['website']
-    unitNumber = req.POST['unitNumber']
-    civicNumber = req.POST['civicNumber']
-    street = req.POST['street']
-    city = req.POST['city']
-    province = req.POST['province']
-    postalCode = req.POST['postalCode']
-
-
-    validContact = ValidateAuction(req.POST)
-
-    if validContact.checkDuplicate():
-        message = f'Email ({email}) already exists'
-        logging.warning(message)
-        error(request=req, message=message)
-        return redirect('contacts:createContact')
-
+def addNewItem(req):
+    name = req.POST['name']
+    description = req.POST['description']
+    categoryid = req.POST['categoryid']
+    subcategoryid = req.POST['subcategoryid']
+    minimumbid = req.POST['minimumbid']
+    itemImage = req.FILES['image']
     
-    messages = validContact.errorMessages
+    print('image:', itemImage.name, settings.MEDIA_URL)
+    validItem = ValidateAuction(req.POST)
+    messages = validItem.errorMessages
     
     if messages:
         for message in messages:
             logging.error(message)
             error(request=req, message=message)
-        return redirect('contacts:createContact')
+        return redirect('auctions:addItem')
 
+    fs = FileSystemStorage()
+    itemName = fs.save(itemImage.name, itemImage)
 
-    contact = Item(
-        firstName = firstName, 
-        lastName = lastName, 
-        company = company, 
-        phone = phone, 
-        email = email, 
-        website = website, 
-        unitNumber = unitNumber, 
-        civicNumber = civicNumber, 
-        street = street, 
-        city = city, 
-        province = province.upper(), 
-        postalCode = postalCode.upper()
+    newItem = Item(
+        name = name, 
+        description = description, 
+        categoryid = categoryid, 
+        subcategoryid = subcategoryid, 
+        minimumbid = minimumbid, 
+        username = req.user.username,
+        image = fs.url(itemName),
+        status = 'posted'
     )
-    contact.save()
-    success(request=req, message=f'Contact for "{firstName} {lastName}" created successfully')
-    return redirect('contacts:index')
+    newItem.save()
+    success(request=req, message=f'Item "{name}" created successfully')
+    return redirect('auctions:index')
 
 
 
@@ -76,8 +62,8 @@ def doUpdateAuction(req, id):
 
     referer = req.session['urlref']
 
-    validContact = ValidateAuction(req.POST)
-    messages = validContact.errorMessages
+    validItem = ValidateAuction(req.POST)
+    messages = validItem.errorMessages
     
     if messages:
         for message in messages:
@@ -116,7 +102,7 @@ def doUpdateAuction(req, id):
 
 
 
-def getAllAuctions():
+def getAllItems():
     try:
         contacts = Item.objects.all()
     except (KeyError, Item.DoesNotExist):

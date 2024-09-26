@@ -28,6 +28,9 @@ SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY_GRACE_PERIOD = 60
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+MEDIA_URL = "/auctions/static/uploads/"
+MEDIA_ROOT = BASE_DIR / "auctions/static/uploads"
+
 
 # Application definition
 

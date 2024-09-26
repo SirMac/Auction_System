@@ -5,38 +5,16 @@
 
 {% block content %}
 <section class="section__container product__container" id="product">
-    <h2 class="section__header">Products</h2>
+    {% include "auctions/message.html" %}
+    {% for item in items %}
+    <h3 class="section__header">Items On Auction</h3>
     <div class="product__grid">
         <div class="product__card">
-            <h4>Stackable Chair</h4>
-            <p>$87.00</p>
-            <img src="{% static 'images/product-1.png' %}" alt="product" />
-        </div>
-        <div class="product__card">
-            <h4>Lamp Tool</h4>
-            <p>$35.00</p>
-            <img src="{% static 'images/product-2.png' %}" alt="product" />
-        </div>
-        <div class="product__card">
-            <h4>Dining Chair</h4>
-            <p>$55.00</p>
-            <img src="{% static 'images/product-3.png' %}" alt="product" />
-        </div>
-        <div class="product__card">
-            <h4>Hand Base Lamp</h4>
-            <p>$35.00</p>
-            <img src="{% static 'images/product-4.png' %}" alt="product" />
-        </div>
-        <div class="product__card">
-            <h4>Stylish Chair</h4>
-            <p>$45.00</p>
-            <img src="{% static 'images/product-5.png' %}" alt="product" />
-        </div>
-        <div class="product__card">
-            <h4>Vintage Chair</h4>
-            <p>$65.00</p>
-            <img src="{% static 'images/product-6.png' %}" alt="product" />
+            <h4>{{item.name}}</h4>
+            <p>{{item.minimumbid}}</p>
+            <img src="{{item.image}}" alt="{{item.name}}" />
         </div>
     </div>
+    {% endfor %}
 </section>
 {% endblock %}

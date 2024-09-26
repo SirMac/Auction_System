@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="addContact container_main">
+  <div class="registration form">
+    <header>Add Item</header>
+    <form action="{% url 'auctions:addItem' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-flex">
+        <input type="text" required name="name" placeholder="Item Name">
+        <input type="text" required name="description" placeholder="Description">
+        <input type="text" required name="categoryid" placeholder="Category">
+        <input type="text" required name="subcategoryid" placeholder="SubCategory">
+        <input type="text" required name="minimumbid" placeholder="Starting Price">
+        <input type="file" required name="image" placeholder="Upload Image">
+      </div>
+
+      {% include "auctions/message.html" %}
+
+      <button type="submit" class="button">Submit</button>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

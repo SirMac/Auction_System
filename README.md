@@ -18,3 +18,15 @@
 8. After 5 min, the system must inform the winning users and the one selling the item about the winner. <br/>
 9. If more than one user with the highest bid, the first bid wins. <br/>
 10. Repeat the biding process until an item is bidded for and a winner declared. <br/>
+
+
+
+from django.core.files.storage import default_storage
+
+#  Saving POST'ed file to storage
+file = request.FILES['myfile']
+file_name = default_storage.save(file.name, file)
+
+#  Reading file from storage
+file = default_storage.open(file_name)
+file_url = default_storage.url(file_name)

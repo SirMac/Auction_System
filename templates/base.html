@@ -7,6 +7,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   <title>Auction System</title>
 </head>
 
@@ -21,9 +22,8 @@
       </div>
     </div>
     <ul class="nav__links" id="nav-links">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#product">Products</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="{% url 'auctions:index' %}">Home</a></li>
+      <li><a href="{% url 'auctions:addItem' %}">Add Item</a></li>
     </ul>
     <div class="nav__search" id="nav-search">
       <input type="text" placeholder="Search" />
@@ -38,10 +38,6 @@
     <div class="header__content">
       <div>
         <h1>Your No. 1 Stop For Auctions</h1>
-        <p>
-          We will help you to make an elegant and luxurious interior designed
-          by professional interior designer.
-        </p>
       </div>
     </div>
   </header>
@@ -54,8 +50,6 @@
       </div>
   </footer>
 
-  <script src="https://unpkg.com/scrollreveal"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <!-- <script src="main.js"></script> -->
 </body>
 

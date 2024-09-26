@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import error, success
 from django.db.models import Q
-from .utils import addNewAuction, doUpdateAuction, getAllAuctions
+from .utils import addNewItem, doUpdateAuction, getAllItems
 from .models import Item
 import logging
 
@@ -10,16 +10,21 @@ import logging
 
 # @login_requireds
 def index(req):
+    items = getAllItems()
+    if items:
+        context = {'items': items}
+        return render(req, 'auctions/index.html', context=context)
+    error(req, message='Currently, no items are available for auction.')
     return render(req, 'auctions/index.html')
     
 
 
 @login_required
-def createContact(req):
+def addItem(req):
     if req.method == 'GET':
-        return render(req, 'auctions/addContact.html')
+        return render(req, 'auctions/addItem.html')
     
-    return addNewAuction(req)
+    return addNewItem(req)
 
 
 
@@ -28,7 +33,7 @@ def readContact(req):
     readAllContacts = req.GET.get('readall')
 
     if readAllContacts is None or readAllContacts.lower() == 'yes':
-        contacts = getAllAuctions()
+        contacts = getAllItems()
         if contacts is None:
             logging.error('No contact found.')
             error(req, message='No contact found.')

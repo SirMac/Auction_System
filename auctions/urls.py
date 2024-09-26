@@ -5,7 +5,7 @@ app_name = 'auctions'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('create', views.createContact, name='createContact'),
+    path('create', views.addItem, name='addItem'),
     path('read', views.readContact, name='readContact'),
     path('update/<int:id>/', views.updateContact, name='updateContact'),
     path('delete/<int:id>/', views.deleteContact, name='deleteContact'),

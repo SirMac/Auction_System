@@ -1,6 +1,7 @@
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
+
 class ValidateUser:
     
     def __init__(self, userData):
@@ -25,6 +26,16 @@ class ValidateUser:
         except ValidationError as e:
             print(str(e))
             self.errorMessages.append('Email address invalid')
+
+
+        
+    # def checkDuplicate(self):
+    #     try:
+    #         Item.objects.get(email=self.email)
+    #     except (KeyError, Item.DoesNotExist):
+    #         return False
+    #     else:
+            return True
 
 
         
