@@ -20,12 +20,11 @@
   max-width: var(--max-width);
   margin: auto;
   padding: 5rem 1rem;
-  height: 200px;
 }
 
 .section__header {
-  margin-bottom: 1rem;
-  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
   font-weight: 600;
   font-family: var(--header-font);
   color: var(--primary-color);
@@ -45,6 +44,7 @@
 img {
   display: flex;
   width: 100%;
+  height: 150px;
 }
 
 a {
@@ -126,6 +126,7 @@ nav {
 .header__container {
   display: grid;
   overflow: hidden;
+  height: 150px;
 }
 
 .header__image {
@@ -244,7 +245,7 @@ nav {
 }
 
 .product__grid {
-  margin-top: 4rem;
+  margin-top: 2rem;
   display: grid;
   gap: 2rem;
 }
@@ -261,7 +262,7 @@ nav {
   top: 0;
   left: 0;
   width: 100%;
-  height: 65%;
+  height: 60%;
   background-color: var(--extra-light);
   z-index: -1;
   transition: 0.3s;
@@ -272,20 +273,37 @@ nav {
 }
 
 .product__card h4 {
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--text-dark);
 }
 
 .product__card p {
-  margin-bottom: 2rem;
+  /* margin-bottom: 1rem; */
+  padding: 5px;
   font-size: 1.2rem;
   color: var(--text-light);
 }
 
 .product__card img {
-  max-width: 275px;
+  max-width: 150px;
   margin-inline: auto;
+}
+
+.product__card .btn-div{
+  text-align: end;
+}
+
+.product__card .bid-btn {
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 5px 15px;
+  font-size: 17px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  background-color: rgba(0, 0, 255, 0.4);
 }
 
 .client__content {
@@ -343,7 +361,7 @@ nav {
 
 .footer {
   background-color: var(--primary-color);
-  position: fixed;
+  position: static;
   left: 0;
   right: 0;
   bottom: 0;
@@ -559,4 +577,50 @@ nav {
   .about__grid {
     gap: 4rem 2rem;
   }
+}
+
+
+
+.biditem-container {
+  width: 100%;
+}
+
+
+.biditem-grid {
+  display: flex;
+  justify-content: center;
+}
+
+.biditem-p {
+  color: brown;
+  padding: 5px;
+}
+
+.bid-info {
+  color: green
+}
+
+
+.btn {
+  width: fit-content;
+  padding: 0.5rem 1.5rem;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--white);
+  white-space: nowrap;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.input {
+  font-size: 1rem;
+  color: var(--text-dark);
+  padding: 5px;
+}
+
+.hidden {
+  display: none;
 }

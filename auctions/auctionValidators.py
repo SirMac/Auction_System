@@ -1,6 +1,5 @@
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
-from .models import Item
+from django.shortcuts import get_object_or_404
+from .models import Auction
 import logging
 import re
 
@@ -36,3 +35,29 @@ class ValidateAuction:
 
 
     
+class ValidateBid:
+  def __init__(self, userData):
+    self.errorMessages = []
+    self.validateNumberFields(userData)
+    self.validateMinimumBid(userData)
+    self.validateHighestBid(userData)
+
+  def validateNumberFields(self, userData):
+    numberFields = ['amount']
+    for numberField in numberFields:
+      if not userData[numberField].isnumeric():
+        logging.error(f'The field "{numberField}" must be numeic')
+        return self.errorMessages.append(f'The field "{numberField}" must be numeic')
+
+  def validateMinimumBid(self, userData):
+    if int(userData['minimumbid']) > int(userData.get('amount')):
+      return self.errorMessages.append(f'Amount cannot be less than starting price')
+
+  def validateHighestBid(self, userData):
+    id = userData.get('id')
+    if id:
+      auction = get_object_or_404(Auction, itemid=id)
+      if int(auction.auction1) > int(userData.get('amount')):
+        return self.errorMessages.append(f'Amount cannot be less than highest bidded price, {auction.auction1}')
+    else:
+      self.errorMessages.append(f'An error occured. Try again later.')

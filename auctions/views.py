@@ -1,16 +1,16 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import error, success
 from django.db.models import Q
-from .utils import addNewItem, doUpdateAuction, getAllItems
-from .models import Item
+from .utils import addNewItem, doUpdateAuction, getAllRecords, addNewBid
+from .models import Item, Bid, Auction
 import logging
 
 
 
 # @login_requireds
 def index(req):
-    items = getAllItems()
+    items = getAllRecords(Item)
     if items:
         context = {'items': items}
         return render(req, 'auctions/index.html', context=context)
@@ -27,13 +27,29 @@ def addItem(req):
     return addNewItem(req)
 
 
+@login_required
+def bidItem(req, id):
+    if req.method == 'GET':
+        bids = None
+        try:
+            auction = Auction.objects.get(itemid=id)
+            bids = get_list_or_404(Bid, auctionid=auction.id)
+        except (KeyError, Auction.DoesNotExist):
+            logging.error(f'Item does not exist')
+        item = get_object_or_404(Item, pk=id)
+        context = {'item': item, 'bids':bids}
+        return render(req, 'auctions/bidItem.html', context=context)
+    
+    return addNewBid(req, id)
+
+
 
 @login_required
 def readContact(req):
     readAllContacts = req.GET.get('readall')
 
     if readAllContacts is None or readAllContacts.lower() == 'yes':
-        contacts = getAllItems()
+        contacts = getAllRecords(Item)
         if contacts is None:
             logging.error('No contact found.')
             error(req, message='No contact found.')

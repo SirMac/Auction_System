@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.messages import error, success
 from django.urls import reverse
-from .auctionValidators import ValidateAuction
+from .auctionValidators import ValidateAuction, ValidateBid
 from django.core.files.storage import FileSystemStorage
-from django.conf import settings
-from .models import Item
+from django.http import HttpResponse
+from datetime import datetime, timedelta
+from .models import Item, Bid, Auction
 import logging
 
 def addNewItem(req):
@@ -15,7 +16,6 @@ def addNewItem(req):
     minimumbid = req.POST['minimumbid']
     itemImage = req.FILES['image']
     
-    print('image:', itemImage.name, settings.MEDIA_URL)
     validItem = ValidateAuction(req.POST)
     messages = validItem.errorMessages
     
@@ -40,8 +40,23 @@ def addNewItem(req):
     )
     newItem.save()
     success(request=req, message=f'Item "{name}" created successfully')
+    addAuction(newItem.id)
     return redirect('auctions:index')
 
+
+
+
+def addAuction(itemid):
+    maxTime = 5
+    currentDate = datetime.today()
+    endat = currentDate + timedelta(minutes=maxTime)
+    newAuction = Auction(
+        itemid = itemid, 
+        endat = endat,
+        status = 'open'
+    )
+    newAuction.save()
+    logging.info(f'Auction for Item "{itemid}" created successfully')
 
 
 
@@ -101,12 +116,55 @@ def doUpdateAuction(req, id):
 
 
 
-
-def getAllItems():
+def getAllRecords(model):
     try:
-        contacts = Item.objects.all()
-    except (KeyError, Item.DoesNotExist):
+        rows = model.objects.all()
+    except (KeyError, model.DoesNotExist):
         return None
     else:
-        return contacts
+        return rows
+
+
+
+def getItemByPk(model, id):
+    try:
+        item = model.objects.get(pk=id)
+    except (KeyError, model.DoesNotExist):
+        return None
+    else:
+        return item
             
+
+
+def addNewBid(req, id):
+    amount = req.POST['amount']
+    username = req.POST['username']
+    
+    validBid = ValidateBid(req.POST)
+    messages = validBid.errorMessages
+    
+    if messages:
+        for message in messages:
+            logging.error(message)
+        return HttpResponse(message)
+
+    auction = get_object_or_404(Auction, itemid=id)
+
+    newBid = Bid(
+        auctionid = auction.id, 
+        username = username, 
+        amount = amount
+    )
+    newBid.save()
+    auction.auction1 = amount
+    auction.save()
+
+    logging.info(f'Bid for Item "{id}" posted successfully')
+
+    bids = get_object_or_404(Bid, auctionid=auction.id)
+    if bids:
+        bidList = "<ul>"
+        for bid in bids:
+           bidList += f'<li>Competing Bid: ${bid.amount}<li>'
+        bidList += '<ul>'
+    return HttpResponse(bidList)
