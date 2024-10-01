@@ -2,14 +2,19 @@ from django.shortcuts import render, redirect, get_object_or_404, get_list_or_40
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import error, success
 from django.db.models import Q
-from .utils import addNewItem, doUpdateAuction, getAllRecords, addNewBid
+from django.utils import timezone
+from django.http import HttpResponse
+from time import strftime, gmtime
+from .utils import addNewItem, doUpdateAuction, getAllRecords 
+from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .models import Item, Bid, Auction
 import logging
 
 
 
-# @login_requireds
+# @login_required
 def index(req):
+    # get only items whose auction is not closed
     items = getAllRecords(Item)
     if items:
         context = {'items': items}
@@ -29,12 +34,13 @@ def addItem(req):
 
 @login_required
 def bidItem(req, id):
+    
     if req.method == 'GET':
         bids = None
         try:
             auction = Auction.objects.get(itemid=id)
-            bids = get_list_or_404(Bid, auctionid=auction.id)
-        except (KeyError, Auction.DoesNotExist):
+            bids = Bid.objects.get(auctionid=auction.id)
+        except:
             logging.error(f'Item does not exist')
         item = get_object_or_404(Item, pk=id)
         context = {'item': item, 'bids':bids}
@@ -124,4 +130,14 @@ def viewDetail(req, id):
     return render(req, 'auctions/detail.html', context=context)
 
 
+
+
+def getBidClosingTime(req, id):
+    
+    resetTimeForItemNotBidded(id)
+
+    bidTimeTupple = getBidTimeDiffInSecTupple(id)
+    timeDiff = strftime('%H:%M:%S', bidTimeTupple)
+    return HttpResponse(timeDiff)
+    
 

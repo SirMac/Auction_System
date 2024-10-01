@@ -11,6 +11,7 @@ from .utils import loggedIn, handleDBConnectionError, isUserRegistered
 @loggedIn
 def loginUser(req):
     if req.method == 'GET':
+        req.session['urlref'] = req.GET.get('next')
         return render(req, 'accounts/login.html')
     
     return authenticateUser(req)
@@ -20,7 +21,7 @@ def loginUser(req):
 def authenticateUser(req):
     username = req.POST['username']
     password = req.POST['password']
-
+    
     if not isUserRegistered(username):
         message = f'Username ({username}) not found'
         logging.error(message)
@@ -36,6 +37,9 @@ def authenticateUser(req):
         return redirect('users:login')
     
     login(req, user)
+    urlReferer = req.session.get('urlref')
+    if urlReferer:
+        return redirect(urlReferer)
     return redirect('auctions:index')
 
 

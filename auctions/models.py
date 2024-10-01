@@ -31,6 +31,7 @@ class Auction(models.Model):
 
 class Bid(models.Model):
     auctionid = models.CharField(max_length=200)
+    itemid = models.CharField(max_length=200)
     username = models.CharField(max_length=200)
     amount = models.IntegerField()
     createdat = models.DateTimeField(default=timezone.now)
@@ -61,6 +62,7 @@ class Category(models.Model):
     
 
 class SubCategory(models.Model):
+    categoryid = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
     createdat = models.DateTimeField(default=timezone.now)

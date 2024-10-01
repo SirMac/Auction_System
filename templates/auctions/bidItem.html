@@ -11,7 +11,9 @@
       <div class="product__card">
         <h4>{{item.name}}</h4>
         <img src="{{item.image}}" alt="{{item.name}}" />
-        <div class="biditem-p">Closes in: {{item.minimumbid}}</div>
+        <div class="biditem-p" id="close-in">
+          Closes in: <span hx-get="{% url 'auctions:getBidClosingTime' item.id %}" hx-trigger="every 2s"></span>
+        </div>
         <p>Starting Price: {{item.minimumbid}}</p>
         <p>Description: {{item.description}}</p>
       </div>

@@ -4,7 +4,8 @@ from django.urls import reverse
 from .auctionValidators import ValidateAuction, ValidateBid
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
-from datetime import datetime, timedelta
+from time import strftime, gmtime, mktime
+from django.utils import timezone
 from .models import Item, Bid, Auction
 import logging
 
@@ -45,14 +46,18 @@ def addNewItem(req):
 
 
 
+def getBidEndDateFromNow(timezone):
+    maxMinutes = 5
+    currentDate = timezone.now()
+    endate = currentDate + timezone.timedelta(minutes=maxMinutes)
+    return endate
+
 
 def addAuction(itemid):
-    maxTime = 5
-    currentDate = datetime.today()
-    endat = currentDate + timedelta(minutes=maxTime)
+    endate = getBidEndDateFromNow(timezone)
     newAuction = Auction(
         itemid = itemid, 
-        endat = endat,
+        endat = endate,
         status = 'open'
     )
     newAuction.save()
@@ -152,6 +157,7 @@ def addNewBid(req, id):
 
     newBid = Bid(
         auctionid = auction.id, 
+        itemid = id, 
         username = username, 
         amount = amount
     )
@@ -168,3 +174,69 @@ def addNewBid(req, id):
            bidList += f'<li>Competing Bid: ${bid.amount}<li>'
         bidList += '<ul>'
     return HttpResponse(bidList)
+
+
+
+
+
+def getBidTimeDiffInSecTupple(id):
+    auction = ''
+    try:
+        auction = Auction.objects.get(itemid=id)
+    except (KeyError, Auction.DoesNotExist):
+        logging.error(f'Auction does not exist')
+        return 0
+    else:
+        endAt = auction.endat
+        currentTime = timezone.now()
+        timeDiff = endAt - currentTime
+        secondsTupple = gmtime(timeDiff.total_seconds())
+        return secondsTupple
+
+
+
+
+def hasBidTimeExpired(id):
+    bidTimeTupple = getBidTimeDiffInSecTupple(id)
+    if not bidTimeTupple:
+        return True
+    bidTimeSeconds = int(strftime('%M%S', bidTimeTupple))
+    if bidTimeSeconds <= 0 or bidTimeSeconds > 500:
+        return True
+    return False
+
+
+
+def hasItemBeenBidded(id):
+    try:
+        bids = Bid.objects.get(itemid=id)
+    except (KeyError, Bid.DoesNotExist):
+        logging.error(f'Bid does not exist')
+        return False
+    else:
+        if bids:
+            return True
+        return False
+    
+
+
+
+def resetTimeForItemNotBidded(id):
+    itemHasBids = hasItemBeenBidded(id)
+    bidTimeExpired = hasBidTimeExpired(id)
+    
+    if bidTimeExpired and not itemHasBids:
+        newEndDate = getBidEndDateFromNow(timezone)
+        try:
+            auction = Auction.objects.get(itemid=id)
+        except:
+            logging.error(f'resetTimeForItemNotBidded: Auction do not exit for item, {id}')
+            return
+        else:
+            auction.endat = newEndDate
+            auction.save()
+
+
+
+def handleBidWinner(id):
+    pass
