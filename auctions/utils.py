@@ -138,7 +138,21 @@ def getItemByPk(model, id):
         return None
     else:
         return item
-            
+
+
+
+def getAuctionByItemId(id, field=''):
+    try:
+        auction = Auction.objects.get(itemid=id)
+    except (KeyError, Auction.DoesNotExist):
+        logging.error(f'Auction does not exist')
+        return None
+    else:
+        if field:
+            return getattr(auction, field)
+        return auction
+
+
 
 
 def addNewBid(req, id):

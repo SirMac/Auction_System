@@ -4,8 +4,8 @@ from django.contrib.messages import error, success
 from django.db.models import Q
 from django.utils import timezone
 from django.http import HttpResponse
-from time import strftime, gmtime
-from .utils import addNewItem, doUpdateAuction, getAllRecords 
+from time import strftime
+from .utils import addNewItem, doUpdateAuction, getAllRecords, getAuctionByItemId 
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .models import Item, Bid, Auction
 import logging
@@ -14,10 +14,10 @@ import logging
 
 # @login_required
 def index(req):
-    # get only items whose auction is not closed
     items = getAllRecords(Item)
+    filteredItem = [item for item in items if getAuctionByItemId(item.id, 'status') == 'open']
     if items:
-        context = {'items': items}
+        context = {'items': filteredItem}
         return render(req, 'auctions/index.html', context=context)
     error(req, message='Currently, no items are available for auction.')
     return render(req, 'auctions/index.html')
@@ -137,7 +137,7 @@ def getBidClosingTime(req, id):
     resetTimeForItemNotBidded(id)
 
     bidTimeTupple = getBidTimeDiffInSecTupple(id)
-    timeDiff = strftime('%H:%M:%S', bidTimeTupple)
+    timeDiff = strftime('%M:%S', bidTimeTupple)
     return HttpResponse(timeDiff)
     
 
