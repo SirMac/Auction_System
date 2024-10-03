@@ -123,6 +123,25 @@ nav {
   display: none;
 }
 
+.nav__notification {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+
+.notification-count {
+  position: absolute;
+  right: 10px;
+  top: 2px;
+  color: brown;
+  font-weight: bold;
+}
+
+
 .header__container {
   display: grid;
   overflow: hidden;
