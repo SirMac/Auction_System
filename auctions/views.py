@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from time import strftime
 from .utils import addNewItem, doUpdateAuction, getAllRecords, getAuctionByItemId
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
-from .utils import handleAuctionClosure, getRecordByPk
+from .utils import handleAuctionClosure, getRecordByPk, hasAuctionClosed
 from .models import Item, Bid, Auction
 import logging
 
@@ -137,9 +137,7 @@ def getBidClosingTime(req, id):
     
     handleAuctionClosure(id)
 
-    item = getRecordByPk(Item, id)
-
-    if item.status == 'close':
+    if hasAuctionClosed(id):
         return HttpResponse('auction closed')
     
     resetTimeForItemNotBidded(id)

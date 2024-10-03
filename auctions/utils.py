@@ -255,6 +255,14 @@ def hasItemBeenBidded(id):
         return False
     
 
+def hasAuctionClosed(itemid):
+    item = getRecordByPk(Item, itemid)
+    if item.status == 'close':
+        return True
+    return False
+
+
+
 
 
 def resetTimeForItemNotBidded(id):
@@ -275,6 +283,10 @@ def resetTimeForItemNotBidded(id):
 
 
 def handleAuctionClosure(itemid):
+
+    if hasAuctionClosed(itemid):
+        return
+
     itemHasBids = hasItemBeenBidded(itemid)
     bidTimeExpired = hasBidTimeExpired(itemid)
     item = getRecordByPk(Item, itemid)
