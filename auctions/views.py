@@ -8,7 +8,7 @@ from time import strftime
 from .utils import addNewItem, doUpdateAuction, getAllRecords, getAuctionByItemId
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .utils import handleAuctionClosure, getRecordByPk, hasAuctionClosed
-from .models import Item, Bid, Auction
+from .models import Item, Bid, Notification
 import logging
 
 
@@ -147,3 +147,12 @@ def getBidClosingTime(req, id):
     return HttpResponse(timeDiff)
     
 
+
+def getNotificationCount(req):
+    user = req.user.username
+    try:
+        notification = Notification.objects.filter(seller=user)
+    except:
+        return None
+    else:
+        return notification
