@@ -20,8 +20,8 @@ class Item(models.Model):
 
 class Auction(models.Model):
     itemid = models.CharField(max_length=200)
-    status = models.CharField(max_length=200)
-    auction1 = models.CharField(max_length=200, default='auction')
+    status = models.CharField(max_length=200, default='open')
+    auction1 = models.CharField(max_length=200, default='0')
     startat = models.DateTimeField(default=timezone.now)
     endat = models.DateTimeField()
 
@@ -42,6 +42,7 @@ class Bid(models.Model):
 
 class Notification(models.Model):
     auctionid = models.CharField(max_length=200)
+    itemid = models.CharField(max_length=200)
     seller = models.CharField(max_length=200)
     winner = models.CharField(max_length=200)
     bid = models.CharField(max_length=200)

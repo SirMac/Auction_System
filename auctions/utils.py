@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404,get_list_or_404
 from django.contrib.messages import error, success
 from django.urls import reverse
 from .auctionValidators import ValidateAuction, ValidateBid
@@ -6,8 +6,9 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from time import strftime, gmtime, mktime
 from django.utils import timezone
-from .models import Item, Bid, Auction
+from .models import Item, Bid, Auction, Notification
 import logging
+from pprint import pprint
 
 def addNewItem(req):
     name = req.POST['name']
@@ -46,11 +47,50 @@ def addNewItem(req):
 
 
 
-def getBidEndDateFromNow(timezone):
-    maxMinutes = 5
-    currentDate = timezone.now()
-    endate = currentDate + timezone.timedelta(minutes=maxMinutes)
-    return endate
+def toInt(str):
+    try:
+        num = int(str)
+    except:
+        return 0
+    else:
+        return num
+
+
+def addNewBid(req, id):
+    amount = req.POST['amount']
+    username = req.POST['username']
+    
+    validBid = ValidateBid(req.POST)
+    messages = validBid.errorMessages
+    
+    if messages:
+        for message in messages:
+            logging.error(message)
+        return HttpResponse(message)
+
+    auction = get_object_or_404(Auction, itemid=id)
+
+    newBid = Bid(
+        auctionid = auction.id, 
+        itemid = id, 
+        username = username, 
+        amount = amount
+    )
+    newBid.save()
+    auction.auction1 = amount
+    auction.save()
+
+    logging.info(f'Bid for Item "{id}" posted successfully')
+
+    bids = Bid.objects.filter(auctionid=auction.id)
+    print('bids:', bids)
+    if bids:
+        bidList = "<ul>"
+        for bid in bids:
+           bidList += f'<li>Competing Bid: ${bid.amount}<li>'
+        bidList += '<ul>'
+    return HttpResponse(bidList)
+
 
 
 def addAuction(itemid):
@@ -123,21 +163,21 @@ def doUpdateAuction(req, id):
 
 def getAllRecords(model):
     try:
-        rows = model.objects.all()
+        record = model.objects.all()
     except (KeyError, model.DoesNotExist):
         return None
     else:
-        return rows
+        return record
 
 
 
-def getItemByPk(model, id):
+def getRecordByPk(model, id):
     try:
-        item = model.objects.get(pk=id)
+        record = model.objects.get(pk=id)
     except (KeyError, model.DoesNotExist):
         return None
     else:
-        return item
+        return record
 
 
 
@@ -155,41 +195,23 @@ def getAuctionByItemId(id, field=''):
 
 
 
-def addNewBid(req, id):
-    amount = req.POST['amount']
-    username = req.POST['username']
-    
-    validBid = ValidateBid(req.POST)
-    messages = validBid.errorMessages
-    
-    if messages:
-        for message in messages:
-            logging.error(message)
-        return HttpResponse(message)
-
-    auction = get_object_or_404(Auction, itemid=id)
-
-    newBid = Bid(
-        auctionid = auction.id, 
-        itemid = id, 
-        username = username, 
-        amount = amount
-    )
-    newBid.save()
-    auction.auction1 = amount
-    auction.save()
-
-    logging.info(f'Bid for Item "{id}" posted successfully')
-
-    bids = get_object_or_404(Bid, auctionid=auction.id)
-    if bids:
-        bidList = "<ul>"
-        for bid in bids:
-           bidList += f'<li>Competing Bid: ${bid.amount}<li>'
-        bidList += '<ul>'
-    return HttpResponse(bidList)
+def getBidEndDateFromNow(timezone):
+    maxMinutes = 5
+    currentDate = timezone.now()
+    endate = currentDate + timezone.timedelta(minutes=maxMinutes)
+    return endate
 
 
+
+
+
+def getHighestBid(auctionid):
+    try:
+        bid = Bid.objects.filter(auctionid=auctionid).order_by('-amount')[0]
+    except:
+        return None
+    else:
+        return bid
 
 
 
@@ -223,7 +245,7 @@ def hasBidTimeExpired(id):
 
 def hasItemBeenBidded(id):
     try:
-        bids = Bid.objects.get(itemid=id)
+        bids = Bid.objects.filter(itemid=id)
     except (KeyError, Bid.DoesNotExist):
         logging.error(f'Bid does not exist')
         return False
@@ -252,5 +274,30 @@ def resetTimeForItemNotBidded(id):
 
 
 
-def handleBidWinner(id):
+def handleAuctionClosure(itemid):
+    itemHasBids = hasItemBeenBidded(itemid)
+    bidTimeExpired = hasBidTimeExpired(itemid)
+    item = getRecordByPk(Item, itemid)
+    auction = getAuctionByItemId(itemid)
+    highestBid = getHighestBid(auction.id)
+    
+    if bidTimeExpired and itemHasBids:
+        newNotification = Notification(
+            auctionid = auction.id,
+            itemid = itemid,
+            seller = item.username,
+            winner = highestBid.username,
+            bid = highestBid.amount
+        )
+        newNotification.save()
+
+        auction.status = 'close'
+        item.status = 'close'
+        item.save()
+        auction.save()
+
+
+
+
+def handleNotification(id):
     pass

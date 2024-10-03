@@ -42,6 +42,14 @@ class ValidateBid:
     self.validateMinimumBid(userData)
     self.validateHighestBid(userData)
 
+  def toInt(self, str):
+    try:
+        num = int(str)
+    except:
+        return 0
+    else:
+        return num
+
   def validateNumberFields(self, userData):
     numberFields = ['amount']
     for numberField in numberFields:
@@ -57,7 +65,7 @@ class ValidateBid:
     id = userData.get('id')
     if id:
       auction = get_object_or_404(Auction, itemid=id)
-      if int(auction.auction1) > int(userData.get('amount')):
+      if self.toInt(auction.auction1) > self.toInt(userData.get('amount')):
         return self.errorMessages.append(f'Amount cannot be less than highest bidded price, {auction.auction1}')
     else:
       self.errorMessages.append(f'An error occured. Try again later.')

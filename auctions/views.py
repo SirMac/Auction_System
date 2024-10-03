@@ -5,8 +5,9 @@ from django.db.models import Q
 from django.utils import timezone
 from django.http import HttpResponse
 from time import strftime
-from .utils import addNewItem, doUpdateAuction, getAllRecords, getAuctionByItemId 
+from .utils import addNewItem, doUpdateAuction, getAllRecords, getAuctionByItemId
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
+from .utils import handleAuctionClosure, getRecordByPk
 from .models import Item, Bid, Auction
 import logging
 
@@ -36,16 +37,16 @@ def addItem(req):
 def bidItem(req, id):
     
     if req.method == 'GET':
-        bids = None
-        try:
-            auction = Auction.objects.get(itemid=id)
-            bids = Bid.objects.get(auctionid=auction.id)
-        except:
-            logging.error(f'Item does not exist')
-        item = get_object_or_404(Item, pk=id)
-        context = {'item': item, 'bids':bids}
-        return render(req, 'auctions/bidItem.html', context=context)
-    
+      bids = None
+      auction = getAuctionByItemId(id)
+      try:
+          bids = Bid.objects.filter(auctionid=auction.id)
+      except:
+          logging.error(f'Item does not exist')
+      item = get_object_or_404(Item, pk=id)
+      context = {'item': item, 'bids':bids}
+      return render(req, 'auctions/bidItem.html', context=context)
+
     return addNewBid(req, id)
 
 
@@ -133,6 +134,13 @@ def viewDetail(req, id):
 
 
 def getBidClosingTime(req, id):
+    
+    handleAuctionClosure(id)
+
+    item = getRecordByPk(Item, id)
+
+    if item.status == 'close':
+        return HttpResponse('auction closed')
     
     resetTimeForItemNotBidded(id)
 
