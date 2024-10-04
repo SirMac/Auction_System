@@ -311,5 +311,25 @@ def handleAuctionClosure(itemid):
 
 
 
-def handleNotification(id):
-    pass
+def getNotificationCount(user):
+    try:
+        sellerNotification = Notification.objects.filter(seller=user)
+        winnerNotification = Notification.objects.filter(winner=user)
+        notificationCount = len(sellerNotification) + len(winnerNotification)
+    except:
+        return ''
+    else:
+        return notificationCount
+    
+
+
+
+def getNotificationList(user):
+    try:
+        sellerNotification = Notification.objects.filter(seller=user)
+        winnerNotification = Notification.objects.filter(winner=user)
+        notificationList = len(sellerNotification) + len(winnerNotification)
+    except:
+        return ''
+    else:
+        return notificationList

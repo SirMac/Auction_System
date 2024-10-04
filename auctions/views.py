@@ -7,7 +7,8 @@ from django.http import HttpResponse
 from time import strftime
 from .utils import addNewItem, doUpdateAuction, getAllRecords, getAuctionByItemId
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
-from .utils import handleAuctionClosure, getRecordByPk, hasAuctionClosed
+from .utils import handleAuctionClosure, hasAuctionClosed, getNotificationCount
+from .utils import getNotificationList
 from .models import Item, Bid, Notification
 import logging
 
@@ -148,11 +149,18 @@ def getBidClosingTime(req, id):
     
 
 
-def getNotificationCount(req):
+def getNotification(req):
     user = req.user.username
-    try:
-        notification = Notification.objects.filter(seller=user)
-    except:
-        return None
-    else:
-        return notification
+    if not user:
+        logging.warning('User not logged in')
+        return HttpResponse('')
+    
+    notificationType = req.GET.get('type')
+    notificationType = notificationType.lower()
+
+    if notificationType == 'count':
+        notificationCount = getNotificationCount(user)
+        return HttpResponse(notificationCount)
+    
+    notificationList = getNotificationList(user)
+    return HttpResponse(notificationList)
