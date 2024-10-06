@@ -5,6 +5,7 @@ from .auctionValidators import ValidateAuction, ValidateBid
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from time import strftime, gmtime
+from datetime import datetime
 from django.utils import timezone
 from .models import Item, Bid, Auction, Notification
 import logging
@@ -291,26 +292,31 @@ def getNotificationHtml(notificationList, title):
         return ''
     
     notificationHtml = f'<h3>{title}</h3>'
-    notificationHtml += '<table border=1>'
+    notificationHtml += "<table id='notification-table'>"
     notificationHtml += '<thead>'
+    notificationHtml += '<tr>'
     notificationHtml += '<th>Item Name</th>'
     notificationHtml += '<th>Winner</th>'
     notificationHtml += '<th>Bit Amount</th>'
     notificationHtml += '<th>Lot Number</th>'
     notificationHtml += '<th>Date</th>'
+    notificationHtml += '</tr>'
     notificationHtml += '</thead>'
+    notificationHtml += '<tbody>'
     for notification in notificationList:
+        formatedDate = (notification.bidtime).strftime('%Y-%m-%d')
         item = getRecordByPk(Item, notification.itemid)
         if item:
             item = item.name
         else:
             item = '---'
-        notificationHtml += '<tbody>'
+        notificationHtml += '<tr>'
         notificationHtml += f'<td>{item}</td>'
         notificationHtml += f'<td>{notification.winner}</td>'
         notificationHtml += f'<td>{notification.bid}</td>'
         notificationHtml += f'<td>{notification.itemid}</td>'
-        notificationHtml += f'<td>{notification.bidtime}</td>'
-        notificationHtml += '<tbody>'
-    notificationHtml += '<table>'
+        notificationHtml += f'<td>{formatedDate}</td>'
+        notificationHtml += '</tr>'
+    notificationHtml += '</tbody>'
+    notificationHtml += '</table>'
     return notificationHtml
