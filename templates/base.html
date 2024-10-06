@@ -31,9 +31,6 @@
         <div id="systemuser">{{user.username}}</div>
         <div class="logout-user display-none" id="logout-user">Logout</div>
       </div>
-      {% else %}
-        <a href="{% url 'users:login' %}">Login</a>
-      {% endif %}
       <div class="notification-icon"
         hx-get="{% url 'auctions:notification' %}?type=list"
         hx-target="#modal-content"
@@ -56,6 +53,9 @@
           hx-target=".notification-count">
         </span>
       </div>
+      {% else %}
+        <a href="{% url 'users:login' %}">Login</a>
+      {% endif %}
     </div>
   </nav>
 
@@ -72,7 +72,6 @@
 
   {% block content %}{% endblock %}
 
-  {#% include "auctions/logoutModal.html" %#}
   {% include "auctions/modal.html" %}
 
   <footer class="footer" id="contact">
@@ -82,11 +81,12 @@
   </footer>
 
   <script>
-    document.getElementById('systemuser').onclick = function(e){
+    let user = document.getElementById('systemuser')
+    user && (user.onclick = function(e){
       let logoutBlock = document.getElementById('logout-user')
       let displayState = logoutBlock.style.display
       displayState !== 'block' ? logoutBlock.style.display = 'block' : logoutBlock.style.display='none'
-    }
+    })
     let modalTemplate = document.getElementById('modal-template');
     let confirmButton = document.getElementById('confirm-button');
     let modalTitle = document.getElementsByClassName("modal-title");

@@ -615,8 +615,17 @@ nav {
   padding: 5px;
 }
 
-.bid-info {
-  color: green
+
+.bid-list {
+  color: cadetblue;
+  font-weight: 600;
+}
+
+
+#bid-winner {
+  color: green;
+  padding: 10px 0;
+  font-weight: 700;
 }
 
 
@@ -642,4 +651,8 @@ nav {
 
 .hidden {
   display: none;
+}
+
+.bid-detail {
+  margin:20px 0
 }

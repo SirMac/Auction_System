@@ -12,31 +12,35 @@
         <h4>{{item.name}}</h4>
         <img src="{{item.image}}" alt="{{item.name}}" />
         <div class="biditem-p" id="close-in">
-          Closes in: <span hx-get="{% url 'auctions:getBidClosingTime' item.id %}" hx-trigger="every 2s"></span>
+          Closes in: <span id="bid-time" hx-get="{% url 'auctions:getBidClosingTime' item.id %}" hx-trigger="every 2s"
+            hx-target="#bid-time"></span>
         </div>
         <p>Starting Price: {{item.minimumbid}}</p>
         <p>Description: {{item.description}}</p>
       </div>
       {% endif %}
-      <form class="bid-detail" 
-      hx-post="{% url 'auctions:bidItem' item.id %}" 
-      hx-target="#bid-info">
-        {% csrf_token %}
-        <div class="bid-info product__card" id="bid-info">
+      <div class="bid-info product__card" id="bid-info">
+        <div class="bid-list">
           {% if bids %}
           <ul>
             {% for bid in bids %}
-              <li>Competing Bid: {{bid.amount}}</li>
+            <li>Competing Bid: {{bid.amount}}</li>
             {% endfor %}
           </ul>
           {% endif %}
         </div>
-        <input class="input" name="amount" type="number">
-        <input class="hidden" name="username" value="{{item.username}}">
-        <input class="hidden" name="minimumbid" value="{{item.minimumbid}}">
-        <input class="hidden" name="id" value="{{item.id}}">
-        <button type="submit" class="btn">Bid</button>
-      </form>
+        <div id="bid-winner" hx-get="{% url 'auctions:getWinner' item.id %}" hx-trigger="every 2s"
+          hx-target="#bid-winner">
+        </div>
+        <form class="bid-detail" hx-post="{% url 'auctions:bidItem' item.id %}" hx-target=".bid-list">
+          {% csrf_token %}
+          <input class="input" name="amount" type="number">
+          <input class="hidden" name="username" value="{{item.username}}">
+          <input class="hidden" name="minimumbid" value="{{item.minimumbid}}">
+          <input class="hidden" name="id" value="{{item.id}}">
+          <button type="submit" class="btn">Bid</button>
+        </form>
+      </div>
     </div>
   </section>
 </div>
