@@ -79,7 +79,10 @@ def createUser(req):
     
     
         
-        
+def deregisterUser(req):
+    user = req.GET.get('user')     
+    print('user:', user)   
+
 
 
 def logoutUser(req):

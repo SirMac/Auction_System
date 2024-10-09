@@ -29,7 +29,10 @@
       {% if user.is_authenticated %}
       <div class="user-container">
         <div id="systemuser">{{user.username}}</div>
-        <div class="logout-user display-none" id="logout-user">Logout</div>
+        <div class="display-none" id="user-settings">
+          <div class="logout-user" id="logout-user">Logout</div>
+          <div class="logout-user" id="logout-user">Deregister</div>
+        </div>
       </div>
       <div class="notification-icon"
         hx-get="{% url 'auctions:notification' %}?type=list"
@@ -83,7 +86,7 @@
   <script>
     let user = document.getElementById('systemuser')
     user && (user.onclick = function(e){
-      let logoutBlock = document.getElementById('logout-user')
+      let logoutBlock = document.getElementById('user-settings')
       let displayState = logoutBlock.style.display
       displayState !== 'block' ? logoutBlock.style.display = 'block' : logoutBlock.style.display='none'
     })
