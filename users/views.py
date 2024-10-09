@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.messages import error
+from django.contrib.messages import error, success
 from .userValidators import ValidateUser
 import logging
 from .utils import loggedIn, handleDBConnectionError, isUserRegistered
@@ -21,17 +21,11 @@ def loginUser(req):
 def authenticateUser(req):
     username = req.POST['username']
     password = req.POST['password']
-    
-    if not isUserRegistered(username):
-        message = f'Username ({username}) not found'
-        logging.error(message)
-        error(request=req, message=message)
-        return redirect('users:login') 
 
     user = authenticate(request=req, username=username, password=password)
 
-    if user is None:
-        message = 'Invalid password'
+    if user is None or not isUserRegistered(username):
+        message = 'Invalid username/password'
         logging.error(message)
         error(request=req, message=message)
         return redirect('users:login')
@@ -57,6 +51,9 @@ def createUser(req):
     username = req.POST['username']
     email = req.POST['email']
     password1 = req.POST['password1']
+    firstName = req.POST['first_name']
+    lastName = req.POST['last_name']
+    
 
     if isUserRegistered(username):
         message = f'User ({username}) already exists'
@@ -73,10 +70,11 @@ def createUser(req):
             error(request=req, message=message)
         return redirect('users:register')
 
-    user = User(username=username, email=email, password=password1)
+    user = User(username=username, email=email, password=password1, first_name=firstName, last_name=lastName)
     user.save()
     user.set_password(user.password)
     user.save()
+    success(request=req, message='Registration successful. Provide credentials to login')
     return redirect('users:login')
     
     

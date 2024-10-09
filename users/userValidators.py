@@ -1,5 +1,6 @@
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+# from django.contrib.auth.models import User
 
 
 class ValidateUser:
@@ -31,11 +32,11 @@ class ValidateUser:
         
     # def checkDuplicate(self):
     #     try:
-    #         Item.objects.get(email=self.email)
-    #     except (KeyError, Item.DoesNotExist):
+    #         User.objects.get(email=self.email)
+    #     except (KeyError, User.DoesNotExist):
     #         return False
     #     else:
-            return True
+    #         return True
 
 
         

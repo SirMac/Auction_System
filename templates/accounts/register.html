@@ -17,6 +17,8 @@
       <header>Signup</header>
       <form action="{% url 'users:register' %}" method="post">
         {% csrf_token %}
+        <input type="text" required name="first_name" placeholder="Enter your first name">
+        <input type="text" required name="last_name" placeholder="Enter your last name">
         <input type="text" required name="username" placeholder="Enter your username">
         <input type="text" required name="email" placeholder="Enter your email">
         <input type="password" required name="password1" placeholder="Create a password">

@@ -276,8 +276,8 @@ def getNotificationList(user):
     except:
         return ''
     else:
-        notificationHtml = getNotificationHtml(sellerNotification, 'Seller Notification')
-        notificationHtml += getNotificationHtml(winnerNotification, 'Winner Notification')
+        notificationHtml = getNotificationHtml(sellerNotification, 'Seller Notification', 'seller')
+        notificationHtml += getNotificationHtml(winnerNotification, 'Winner Notification', 'winner')
         if len(notificationHtml) == 0:
             return HttpResponse('Notification not found')
         return HttpResponse(notificationHtml)
@@ -286,17 +286,21 @@ def getNotificationList(user):
 
 
 
-def getNotificationHtml(notificationList, title):
+def getNotificationHtml(notificationList, title, type):
 
     if len(notificationList) == 0:
         return ''
     
-    notificationHtml = f'<h3>{title}</h3>'
+    notificationHtml = f"<div class='notification-tbl-main'>"
+    notificationHtml += f'<h3>{title}</h3>'
     notificationHtml += "<table id='notification-table'>"
     notificationHtml += '<thead>'
     notificationHtml += '<tr>'
     notificationHtml += '<th>Item Name</th>'
-    notificationHtml += '<th>Winner</th>'
+    if type == 'winner': 
+        notificationHtml += '<th>Winner</th>'
+    else: 
+        notificationHtml += '<th>Seller</th>'
     notificationHtml += '<th>Bit Amount</th>'
     notificationHtml += '<th>Lot Number</th>'
     notificationHtml += '<th>Date</th>'
@@ -312,11 +316,15 @@ def getNotificationHtml(notificationList, title):
             item = '---'
         notificationHtml += '<tr>'
         notificationHtml += f'<td>{item}</td>'
-        notificationHtml += f'<td>{notification.winner}</td>'
+        if type == 'winner':
+            notificationHtml += f'<td>{notification.winner}</td>'
+        else:
+            notificationHtml += f'<td>{notification.seller}</td>'
         notificationHtml += f'<td>{notification.bid}</td>'
         notificationHtml += f'<td>{notification.itemid}</td>'
         notificationHtml += f'<td>{formatedDate}</td>'
         notificationHtml += '</tr>'
     notificationHtml += '</tbody>'
     notificationHtml += '</table>'
+    notificationHtml += '</div>'
     return notificationHtml
