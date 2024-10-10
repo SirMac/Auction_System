@@ -281,26 +281,3 @@
 }
 
 
-
-.user-container {
-  position: relative;
-}
-
-
-#systemuser {
-  font-weight: 500;
-  background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  padding: 5px;
-  cursor: pointer;
-}
-
-
-.logout-user {
-  position: absolute;
-  top: 35px;
-  background-color: rgba(0, 0, 0, 0.2);
-  padding: 10px 5px;
-  font-weight: 500;
-}
