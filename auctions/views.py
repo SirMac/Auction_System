@@ -7,7 +7,7 @@ from .utils import addNewItem, getAllRecords, getAuctionByItemId
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .utils import handleAuctionClosure, hasAuctionClosed, getNotificationCount
 from .utils import getNotificationList, getRecordByPk
-from .models import Item, Bid, Notification
+from .models import Item, Bid, Notification, Category, SubCategory
 import logging
 
 
@@ -95,3 +95,32 @@ def getWinner(req, id):
         return HttpResponse('')
     else:
         return HttpResponse(f'Winner: {notification.winner}')
+    
+
+def getSelectHtml(req):
+    tableName = req.GET.get('target').lower()
+    models = {'category':Category, 'subcategory':SubCategory} 
+    select = "<option value=''>---</option>"
+
+    if not tableName:
+        logging.error('getSelectHtml: request query string empty')
+        return HttpResponse(select)
+    
+    model = models[tableName]
+
+    if not model:
+        logging.error(f'getSelectHtml: model not found for {tableName}')
+        return HttpResponse(select)
+    
+    records = getAllRecords(model)
+
+    if not records:
+        logging.error(f'getSelectHtml: record not found for {tableName}')
+        return HttpResponse(select)
+    
+    for record in records:
+        select += f"<option value='{record.id}'>"
+        select += record.name
+        select += '</option>'
+
+    return HttpResponse(select)
