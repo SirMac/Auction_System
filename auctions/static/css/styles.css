@@ -19,7 +19,7 @@
 .section__container {
   max-width: var(--max-width);
   margin: auto;
-  padding: 5rem 1rem;
+  padding: 3rem 1rem;
 }
 
 .section__header {
@@ -664,14 +664,38 @@ nav {
 }
 
 
-.notification-tbl-main {
-  position: absolute;
-  top: 35px;
+#systemuser {
+  font-weight: 500;
   background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+
+#user-settings {
+  position: absolute;
+  top: 36px;
+  right: -15px;
+  background-color: rgba(0, 0, 0, 0.8);
   padding: 10px 5px;
   font-weight: 500;
   z-index: 2;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  color: white;
+  border-radius: 5px;
+}
+
+
+.notification-tbl-main {
+  padding: 20px 0;
+}
+
+
+
+.logout-user, .notification-icon, .deregister-user {
+  cursor: pointer;
 }
 
 
@@ -695,15 +719,5 @@ nav {
   text-align: center;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
-}
-
-
-#systemuser {
-  font-weight: 500;
-  background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  padding: 5px;
-  cursor: pointer;
 }
 

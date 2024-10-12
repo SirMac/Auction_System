@@ -12,68 +12,67 @@
 </head>
 
 <body>
-  <nav>
-    <div class="nav__header">
-      <div class="nav__logo">
-        <a href="{% url 'auctions:index' %}" class="logo">Auction App</a>
-      </div>
-      <div class="nav__menu__btn" id="menu-btn">
-        <i class="ri-menu-line"></i>
-      </div>
-    </div>
-    <ul class="nav__links" id="nav-links">
-      <li><a href="{% url 'auctions:index' %}">Home</a></li>
-      <li><a href="{% url 'auctions:addItem' %}">Add Item</a></li>
-    </ul>
-    <div class="nav__notification" id="nav-notification">
-      {% if user.is_authenticated %}
-      <div class="user-container">
-        <div id="systemuser">{{user.username}}</div>
-        <div class="display-none" id="user-settings">
-          <div class="logout-user" id="logout-user">Logout</div>
-          <div class="logout-user" id="logout-user">Deregister</div>
+  <div id="main-container">
+    <nav>
+      <div class="nav__header">
+        <div class="nav__logo">
+          <a href="{% url 'auctions:index' %}" class="logo">Auction App</a>
+        </div>
+        <div class="nav__menu__btn" id="menu-btn">
+          <i class="ri-menu-line"></i>
         </div>
       </div>
-      <div class="notification-icon"
-        hx-get="{% url 'auctions:notification' %}?type=list"
-        hx-target="#modal-content"
-      >
-        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M12.02 2.90991C8.70997 2.90991 6.01997 5.59991 6.01997 8.90991V11.7999C6.01997 12.4099 5.75997 13.3399 5.44997 13.8599L4.29997 15.7699C3.58997 16.9499 4.07997 18.2599 5.37997 18.6999C9.68997 20.1399 14.34 20.1399 18.65 18.6999C19.86 18.2999 20.39 16.8699 19.73 15.7699L18.58 13.8599C18.28 13.3399 18.02 12.4099 18.02 11.7999V8.90991C18.02 5.60991 15.32 2.90991 12.02 2.90991Z"
-            stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"></path>
-          <path
-            d="M13.87 3.19994C13.56 3.10994 13.24 3.03994 12.91 2.99994C11.95 2.87994 11.03 2.94994 10.17 3.19994C10.46 2.45994 11.18 1.93994 12.02 1.93994C12.86 1.93994 13.58 2.45994 13.87 3.19994Z"
-            stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round">
-          </path>
-          <path
-            d="M15.02 19.0601C15.02 20.7101 13.67 22.0601 12.02 22.0601C11.2 22.0601 10.44 21.7201 9.90002 21.1801C9.36002 20.6401 9.02002 19.8801 9.02002 19.0601"
-            stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"></path>
-        </svg>
-        <span class="notification-count" 
-          hx-get="{% url 'auctions:notification' %}?type=count" 
-          hx-trigger="load"
-          hx-target=".notification-count">
-        </span>
-      </div>
-      {% else %}
+      <ul class="nav__links" id="nav-links">
+        <li><a href="{% url 'auctions:index' %}">Home</a></li>
+        <li><a href="{% url 'auctions:addItem' %}">Add Item</a></li>
+      </ul>
+      <div class="nav__notification" id="nav-notification">
+        {% if user.is_authenticated %}
+        <div class="user-container">
+          <div id="systemuser">{{user.username}}</div>
+          <div class="display-none" id="user-settings">
+            <div class="logout-user" id="logout-user">Logout</div>
+            <hr style="margin: 10px 0;" />
+            <div class="deregister-user" id="deregister-user">Deregister</div>
+          </div>
+        </div>
+        <div class="notification-icon" hx-get="{% url 'auctions:notification' %}?type=list" hx-target="#modal-content">
+          <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12.02 2.90991C8.70997 2.90991 6.01997 5.59991 6.01997 8.90991V11.7999C6.01997 12.4099 5.75997 13.3399 5.44997 13.8599L4.29997 15.7699C3.58997 16.9499 4.07997 18.2599 5.37997 18.6999C9.68997 20.1399 14.34 20.1399 18.65 18.6999C19.86 18.2999 20.39 16.8699 19.73 15.7699L18.58 13.8599C18.28 13.3399 18.02 12.4099 18.02 11.7999V8.90991C18.02 5.60991 15.32 2.90991 12.02 2.90991Z"
+              stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"></path>
+            <path
+              d="M13.87 3.19994C13.56 3.10994 13.24 3.03994 12.91 2.99994C11.95 2.87994 11.03 2.94994 10.17 3.19994C10.46 2.45994 11.18 1.93994 12.02 1.93994C12.86 1.93994 13.58 2.45994 13.87 3.19994Z"
+              stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round">
+            </path>
+            <path
+              d="M15.02 19.0601C15.02 20.7101 13.67 22.0601 12.02 22.0601C11.2 22.0601 10.44 21.7201 9.90002 21.1801C9.36002 20.6401 9.02002 19.8801 9.02002 19.0601"
+              stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10"></path>
+          </svg>
+          <span class="notification-count" hx-get="{% url 'auctions:notification' %}?type=count" hx-trigger="load"
+            hx-target=".notification-count">
+          </span>
+        </div>
+        {% else %}
         <a href="{% url 'users:login' %}">Login</a>
-      {% endif %}
-    </div>
-  </nav>
-
-  <header class="section__container header__container" id="home">
-    <div class="header__image">
-      <img src="{% static 'images/header.png' %}" alt="header" />
-    </div>
-    <div class="header__content">
-      <div>
-        <h1>Your No. 1 Stop For Auctions</h1>
+        {% endif %}
       </div>
-    </div>
-  </header>
+    </nav>
 
-  {% block content %}{% endblock %}
+    <header class="section__container header__container" id="home">
+      <div class="header__image">
+        <img src="{% static 'images/header.png' %}" alt="header" />
+      </div>
+      <div class="header__content">
+        <div>
+          <h1>Your No. 1 Stop For Auctions</h1>
+        </div>
+      </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+  </div>
 
   {% include "auctions/modal.html" %}
 
@@ -85,11 +84,12 @@
 
   <script>
     let user = document.getElementById('systemuser')
-    user && (user.onclick = function(e){
+    user && (user.onclick = function (e) {
       let logoutBlock = document.getElementById('user-settings')
       let displayState = logoutBlock.style.display
-      displayState !== 'block' ? logoutBlock.style.display = 'block' : logoutBlock.style.display='none'
+      displayState !== 'block' ? logoutBlock.style.display = 'block' : logoutBlock.style.display = 'none'
     })
+    
     let modalTemplate = document.getElementById('modal-template');
     let confirmButton = document.getElementById('confirm-button');
     let modalTitle = document.getElementsByClassName("modal-title");
@@ -105,6 +105,13 @@
       },
 
       {
+        title: 'Deregister',
+        url: "/accounts/deregister",
+        trigger: document.getElementsByClassName('deregister-user'),
+        content: `You are about Deregister`
+      },
+
+      {
         title: 'Notifications',
         trigger: document.getElementsByClassName('notification-icon'),
         hideFooter: true
@@ -116,14 +123,22 @@
     function displayModal(modalDetail) {
       for (const item of modalDetail) {
         if (!item.trigger) return
-        for (let button of item.trigger) {
-          button.onclick = function (ele) {
+        for (let element of item.trigger) {
+          element.onclick = function (ele) {
             let paramId = ele.target.getAttribute('paramId') || ''
             item.title && (modalTitle.innerHTML = item.title)
             item.content && (modalContent.innerHTML = item.content)
             item.url && confirmButton.setAttribute('href', `${item.url}${paramId}/`)
             item.hideFooter ? (modalFooter.style.display = 'none') : (modalFooter.style.display = '')
             modalTemplate.style.display = 'block';
+            // setTimeout(() => {
+            //   // let mainContainer = document.getElementById('main-container')
+            //   document.addEventListener('click', function () {
+            //     console.log('document clicked')
+            //     modalTemplate.style.display = 'none';
+            //     document.removeEventListener('click', () => console.log('event removed'))
+            //   })
+            // }, 1000)
           }
         }
       }

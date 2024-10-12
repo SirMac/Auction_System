@@ -258,8 +258,8 @@
 .cmodal .close {
   color: black;
   float: right;
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 40px;
+  font-weight: 600;
 }
 
 .close:hover,
@@ -274,10 +274,3 @@
 .display-none {
   display: none;
 }
-
-
-.logout-user, .notification-icon {
-  cursor: pointer;
-}
-
-

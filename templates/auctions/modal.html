@@ -13,13 +13,23 @@
 
 
 <script>
-    var closeModal = document.getElementsByClassName("close-modal");
+    let modals = document.getElementsByClassName("close-modal");
 
-    for (let element of closeModal) {
-        element.onclick = function () {
-            document.getElementById("modal-content").innerHTML = '';
-            document.getElementById("modal-template").style.display = "none";
-        }
+    function closeModal() {
+        document.getElementById("modal-content").innerHTML = '';
+        document.getElementById("modal-template").style.display = "none";
     }
+
+    for (let element of modals) {
+        element.onclick = closeModal
+    }
+
+    // document.onclick = function(){
+    //     let modalState = document.getElementById('modal-template').style.display
+    //     console.log('modalState:', modalState)
+    //     if(modalState === 'block'){
+    //         return closeModal()
+    //     }
+    // }
 
 </script>

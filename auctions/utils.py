@@ -237,7 +237,7 @@ def handleAuctionClosure(itemid):
     auction = getAuctionByItemId(itemid)
     highestBid = getHighestBid(auction.id)
     
-    if bidTimeExpired and itemHasBids:
+    if bidTimeExpired and itemHasBids and highestBid:
         newNotification = Notification(
             auctionid = auction.id,
             itemid = itemid,

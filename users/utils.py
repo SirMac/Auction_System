@@ -31,7 +31,21 @@ def isUserRegistered(username):
        return False
     else:
        return True
-    
+
+
+
+
+def isUerActive(username):
+    try:
+        user = User.objects.get(username=username)
+    except (KeyError, User.DoesNotExist):
+       return False
+    else:
+       if user.is_active == 0:
+            return False
+       return True
+
+
 
 
 def redirectPageNotFound(req, exception): 

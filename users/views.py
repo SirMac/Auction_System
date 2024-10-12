@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.messages import error, success
-from .userValidators import ValidateUser
+from .userValidators import ValidateUser, ValidateUserDeregistration
 import logging
-from .utils import loggedIn, handleDBConnectionError, isUserRegistered
+from .utils import loggedIn, handleDBConnectionError, isUserRegistered, isUerActive
 
 
 
@@ -24,7 +24,7 @@ def authenticateUser(req):
 
     user = authenticate(request=req, username=username, password=password)
 
-    if user is None or not isUserRegistered(username):
+    if user is None or not isUerActive(username):
         message = 'Invalid username/password'
         logging.error(message)
         error(request=req, message=message)
@@ -80,8 +80,29 @@ def createUser(req):
     
         
 def deregisterUser(req):
-    user = req.GET.get('user')     
-    print('user:', user)   
+    username = req.user.username
+    deregisterValidation = ValidateUserDeregistration(username)
+    messages = deregisterValidation.errorMessages
+    
+    if messages:
+        # message = messages[len(messages)-1]
+        for message in messages:
+            logging.error(message)
+            error(request=req, message=message)
+        return redirect('auctions:index')
+    
+
+    try:
+        user = User.objects.get(username=username)
+    except:
+        logging.error('deregisterUser: Error occured when getting user')
+        return redirect('auctions:index')
+    else:
+        user.is_active = 0
+        user.save()
+        logging.info(f"deregisterUser: User, '{username}' deregistered successfully")
+        success(request=req, message=f"User, '{username}' have been deregistered successfully")
+        return logoutUser(req)
 
 
 
