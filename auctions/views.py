@@ -1,26 +1,29 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.contrib.messages import error, success
+from django.contrib.messages import error
 from django.http import HttpResponse
 from time import strftime
 from .utils import addNewItem, getAllRecords, getAuctionByItemId
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .utils import handleAuctionClosure, hasAuctionClosed, getNotificationCount
 from .utils import getNotificationList, getRecordByPk, getBidWinner
-from .models import Item, Bid, Notification, Category, SubCategory, Auction
+from .models import Item, Bid, Category, SubCategory
 import logging
 
 
 
 # @login_required
 def index(req):
-    items = getAllRecords(Item)
-    filteredItem = [item for item in items if getAuctionByItemId(item.id, 'status') == 'open']
-    if items:
-        context = {'items': filteredItem}
+    # items = getAllRecords(Item)
+    # filteredItem = [item for item in items if getAuctionByItemId(item.id, 'status') == 'opened']
+    try:
+        filteredItems = Item.objects.filter(status='opened')
+    except:
+        logging.error('Index: items not found')
+        return render(req, 'auctions/index.html')
+    else:
+        context = {'items': filteredItems}
         return render(req, 'auctions/index.html', context=context)
-    error(req, message='Currently, no items are available for auction.')
-    return render(req, 'auctions/index.html')
     
 
 
@@ -108,6 +111,7 @@ def getLiveBidDetail(req, id):
 
 def getSelectHtml(req):
     tableName = req.GET.get('target').lower()
+    categoryId = req.GET.get('categoryid')
     models = {'category':Category, 'subcategory':SubCategory} 
     select = "<option value=''>---</option>"
 
@@ -121,7 +125,10 @@ def getSelectHtml(req):
         logging.error(f'getSelectHtml: model not found for {tableName}')
         return HttpResponse(select)
     
-    records = getAllRecords(model)
+    if categoryId:
+        records = model.objects.filter(categoryid=categoryId)
+    else:
+        records = getAllRecords(model)
 
     if not records:
         logging.error(f'getSelectHtml: record not found for {tableName}')
@@ -133,3 +140,18 @@ def getSelectHtml(req):
         select += '</option>'
 
     return HttpResponse(select)
+
+
+
+
+
+def getSoldItems(req):
+    context = {'pageType':'soldItems'}
+    try:
+        filteredItems = Item.objects.filter(status='closed')
+    except:
+        logging.error('getSoldItems: items not found')
+        return render(req, 'auctions/index.html', context=context)
+    else:
+        context['items'] = filteredItems
+        return render(req, 'auctions/index.html', context=context)

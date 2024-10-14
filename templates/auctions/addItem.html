@@ -3,6 +3,13 @@
 
 
 {% block content %}
+
+<div
+  hx-get="{% url 'auctions:getSelect' %}?target=category"
+  hx-trigger="load"
+  hx-target="#category"
+></div>
+
 <div class="addContact container_main">
   <div class="registration form">
     <header>Add Item</header>
@@ -12,12 +19,11 @@
         <input type="text" required name="name" placeholder="Item Name">
         <input type="text" required name="description" placeholder="Description">
         <select name="categoryid" id="category"
-          hx-get="{% url 'auctions:getSelect' %}?target=category"
-          hx-trigger="load"
-          hx-target="#category"
+          hx-get="{% url 'auctions:getSelect' %}?target=subcategory"
+          hx-target="#subcategory"
+          hx-indicator=".htmx-indicator"
         ></select>
-        <!-- <input type="text" required name="categoryid" placeholder="Category"> -->
-        <input type="text" required name="subcategoryid" placeholder="SubCategory">
+        <select name="subcategoryid" id="subcategory"></select>
         <input type="text" required name="minimumbid" placeholder="Starting Price">
         <input type="file" required name="image" placeholder="Upload Image">
       </div>

@@ -47,7 +47,7 @@ class ValidateUserDeregistration:
 
     def validateActiveItemOnAuction(self):
         try:
-            item = Item.objects.get(username=self.username)
+            item = Item.objects.filter(username=self.username, status='opened')[0]
         except KeyError as e:
             logging.error(str(e))
         else:
@@ -60,8 +60,8 @@ class ValidateUserDeregistration:
 
     def validateActiveBid(self):
         try:
-            item = Item.objects.get(username=self.username)
-            auction = Auction.objects.get(itemid=item.id)
+            item = Item.objects.filter(username=self.username, status='opened')[0]
+            auction = Auction.objects.filter(itemid=item.id)[0]
         except KeyError as e:
             logging.error(str(e))
         else:

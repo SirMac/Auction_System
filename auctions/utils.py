@@ -39,7 +39,7 @@ def addNewItem(req):
         minimumbid = minimumbid, 
         username = req.user.username,
         image = fs.url(itemName),
-        status = 'posted'
+        status = 'opened'
     )
     newItem.save()
     success(request=req, message=f'Item "{name}" created successfully')
@@ -74,13 +74,6 @@ def addNewBid(req, id):
         logging.info(f'Bid for Item "{id}" with amount {amount} submitted for {username}')
 
     return HttpResponse(f"Bid amount {amount} submitted for {username}")
-    # bids = Bid.objects.filter(auctionid=auction.id)
-    # if bids:
-    #     bidList = "<ul>"
-    #     for bid in bids:
-    #        bidList += f'<li>Competing Bid: ${bid.amount}<li>'
-    #     bidList += '<ul>'
-    # return HttpResponse(bidList)
 
 
 
@@ -89,7 +82,7 @@ def addAuction(itemid):
     newAuction = Auction(
         itemid = itemid, 
         endat = endate,
-        status = 'open'
+        status = 'opened'
     )
     newAuction.save()
     logging.info(f'Auction for Item "{itemid}" created successfully')
@@ -202,7 +195,7 @@ def hasItemBeenBidded(id):
 
 def hasAuctionClosed(itemid):
     item = getRecordByPk(Item, itemid)
-    if item.status == 'close':
+    if item.status == 'closed':
         return True
     return False
 
@@ -249,8 +242,8 @@ def handleAuctionClosure(itemid):
         )
         newNotification.save()
 
-        auction.status = 'close'
-        item.status = 'close'
+        auction.status = 'closed'
+        item.status = 'closed'
         item.save()
         auction.save()
 
@@ -262,8 +255,8 @@ def getBidWinner(itemid):
         return None
     try:
         notification = Notification.objects.get(itemid=itemid)
-    except:
-        logging.error('getWinner: Error occured')
+    except KeyError as e:
+        logging.error(f'getWinner: Error occured: {e}')
         return None
     else:
         return notification.winner

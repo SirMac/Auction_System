@@ -299,9 +299,16 @@ nav {
 
 .product__card p {
   /* margin-bottom: 1rem; */
-  padding: 5px;
-  font-size: 1.2rem;
+  padding: 5px 0;
+  font-size: 0.8rem;
+  font-weight: 500;
   color: var(--text-light);
+}
+
+
+.product__card .product-status {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .product__card img {

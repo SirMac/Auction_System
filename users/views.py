@@ -85,10 +85,10 @@ def deregisterUser(req):
     messages = deregisterValidation.errorMessages
     
     if messages:
-        # message = messages[len(messages)-1]
-        for message in messages:
-            logging.error(message)
-            error(request=req, message=message)
+        message = messages[len(messages)-1]
+        # for message in messages:
+        logging.error(message)
+        error(request=req, message=message)
         return redirect('auctions:index')
     
 

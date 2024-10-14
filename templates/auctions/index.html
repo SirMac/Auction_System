@@ -5,7 +5,11 @@
 {% block content %}
 <section class="section__container product__container" id="product">
     {% include "auctions/message.html" %}
+    {% if pageType and pageType == 'soldItems' %}
+    <h4 class="section__header">Sold Items</h4>
+    {% else %}
     <h4 class="section__header">Items On Auction</h4>
+    {% endif %}
     {% if items %}
     <div class="product__grid">
         {% for item in items %}
@@ -13,12 +17,14 @@
             <h4>{{item.name}}</h4>
             <!-- <p>item.minimumbid</p> -->
             <p>Started: {{item.createdat}}</p>
+            <div class="product-status">Status: {{item.status}}</div>
             <div class="btn-div">
-                <a 
-                    class="bid-btn" 
-                    href="{% url 'auctions:bidItem' item.id %}"
-                >
-                    Bid
+                <a class="bid-btn" href="{% url 'auctions:bidItem' item.id %}">
+                    {% if pageType and pageType == 'soldItems' %}
+                        View
+                    {% else %}
+                        Bid
+                    {% endif %}
                 </a>
             </div>
             <img src="{{item.image}}" alt="{{item.name}}" />
@@ -26,7 +32,7 @@
         {% endfor %}
         {% else %}
     </div>
-    <div class="auction-notice">No items available for auction</div>
+    <div class="auction-notice">No items available</div>
     {% endif %}
 </section>
 {% endblock %}
