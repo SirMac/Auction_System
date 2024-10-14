@@ -46,6 +46,7 @@ class Notification(models.Model):
     seller = models.CharField(max_length=200)
     winner = models.CharField(max_length=200)
     bid = models.CharField(max_length=200)
+    status = models.CharField(max_length=100, default='pending')
     bidtime = models.DateTimeField(default=timezone.now)
     createdat = models.DateTimeField(default=timezone.now)
 

@@ -50,7 +50,7 @@ def addNewItem(req):
 
 def addNewBid(req, id):
     amount = req.POST.get('amount')
-    username = req.POST.get('username')
+    username = req.user.username
     auction = getAuctionByItemId(id)
 
     if not hasAuctionClosed(id):
@@ -71,15 +71,16 @@ def addNewBid(req, id):
         newBid.save()
         auction.auction1 = amount
         auction.save()
-        logging.info(f'Bid for Item "{id}" posted successfully')
+        logging.info(f'Bid for Item "{id}" with amount {amount} submitted for {username}')
 
-    bids = Bid.objects.filter(auctionid=auction.id)
-    if bids:
-        bidList = "<ul>"
-        for bid in bids:
-           bidList += f'<li>Competing Bid: ${bid.amount}<li>'
-        bidList += '<ul>'
-    return HttpResponse(bidList)
+    return HttpResponse(f"Bid amount {amount} submitted for {username}")
+    # bids = Bid.objects.filter(auctionid=auction.id)
+    # if bids:
+    #     bidList = "<ul>"
+    #     for bid in bids:
+    #        bidList += f'<li>Competing Bid: ${bid.amount}<li>'
+    #     bidList += '<ul>'
+    # return HttpResponse(bidList)
 
 
 
@@ -256,10 +257,24 @@ def handleAuctionClosure(itemid):
 
 
 
+def getBidWinner(itemid):
+    if not hasAuctionClosed(itemid):
+        return None
+    try:
+        notification = Notification.objects.get(itemid=itemid)
+    except:
+        logging.error('getWinner: Error occured')
+        return None
+    else:
+        return notification.winner
+
+
+
+
 def getNotificationCount(user):
     try:
-        sellerNotification = Notification.objects.filter(seller=user)
-        winnerNotification = Notification.objects.filter(winner=user)
+        sellerNotification = Notification.objects.filter(seller=user, status='pending')
+        winnerNotification = Notification.objects.filter(winner=user, status='pending')
         notificationCount = len(sellerNotification) + len(winnerNotification)
     except:
         return ''
@@ -276,6 +291,8 @@ def getNotificationList(user):
     except:
         return ''
     else:
+        setNotificationStatus(sellerNotification)
+        setNotificationStatus(winnerNotification)
         notificationHtml = getNotificationHtml(sellerNotification, 'Seller Notification', 'seller')
         notificationHtml += getNotificationHtml(winnerNotification, 'Winner Notification', 'winner')
         if len(notificationHtml) == 0:
@@ -283,6 +300,13 @@ def getNotificationList(user):
         return HttpResponse(notificationHtml)
     
 
+
+def setNotificationStatus(notificationRecord):
+    if not notificationRecord:
+        return 
+    for record in notificationRecord:
+        record.status = 'viewed'
+        record.save()
 
 
 
@@ -298,9 +322,9 @@ def getNotificationHtml(notificationList, title, type):
     notificationHtml += '<tr>'
     notificationHtml += '<th>Item Name</th>'
     if type == 'winner': 
-        notificationHtml += '<th>Winner</th>'
-    else: 
         notificationHtml += '<th>Seller</th>'
+    else: 
+        notificationHtml += '<th>Winner</th>'
     notificationHtml += '<th>Bit Amount</th>'
     notificationHtml += '<th>Lot Number</th>'
     notificationHtml += '<th>Date</th>'
@@ -317,9 +341,9 @@ def getNotificationHtml(notificationList, title, type):
         notificationHtml += '<tr>'
         notificationHtml += f'<td>{item}</td>'
         if type == 'winner':
-            notificationHtml += f'<td>{notification.winner}</td>'
-        else:
             notificationHtml += f'<td>{notification.seller}</td>'
+        else:
+            notificationHtml += f'<td>{notification.winner}</td>'
         notificationHtml += f'<td>{notification.bid}</td>'
         notificationHtml += f'<td>{notification.itemid}</td>'
         notificationHtml += f'<td>{formatedDate}</td>'

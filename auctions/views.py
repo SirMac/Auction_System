@@ -6,8 +6,8 @@ from time import strftime
 from .utils import addNewItem, getAllRecords, getAuctionByItemId
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .utils import handleAuctionClosure, hasAuctionClosed, getNotificationCount
-from .utils import getNotificationList, getRecordByPk
-from .models import Item, Bid, Notification, Category, SubCategory
+from .utils import getNotificationList, getRecordByPk, getBidWinner
+from .models import Item, Bid, Notification, Category, SubCategory, Auction
 import logging
 
 
@@ -85,17 +85,26 @@ def getNotification(req):
 
 
 
-def getWinner(req, id):
-    if not hasAuctionClosed(id):
-        return HttpResponse('')
+def getLiveBidDetail(req, id):
     try:
-        notification = Notification.objects.get(itemid=id)
+        auction = getAuctionByItemId(id)
+        if not auction:
+            return HttpResponse('')
+        bids = Bid.objects.filter(auctionid=auction.id)
     except:
-        logging.error('getWinner: Error occured')
         return HttpResponse('')
     else:
-        return HttpResponse(f'Winner: {notification.winner}')
-    
+        bidList = "<ul>"
+        for bid in bids:
+            bidList += f'<li>Competing Bid: ${bid.amount}<li>'
+        bidList += '<ul>'
+        winner = getBidWinner(id)
+        if winner:
+            bidList += f"<div id='bid-winner'>Winner: {winner}</div>"
+        return HttpResponse(bidList)
+
+
+
 
 def getSelectHtml(req):
     tableName = req.GET.get('target').lower()
