@@ -53,25 +53,27 @@ def addNewBid(req, id):
     username = req.user.username
     auction = getAuctionByItemId(id)
 
-    if not hasAuctionClosed(id):
-        validBid = ValidateBid(req.POST)
-        messages = validBid.errorMessages
-        
-        if messages:
-            for message in messages:
-                logging.error(message)
-            return HttpResponse(message)
+    if hasAuctionClosed(id):
+        return HttpResponse('Auction has closed')
+    
+    validBid = ValidateBid(req.POST)
+    messages = validBid.errorMessages
+    
+    if messages:
+        for message in messages:
+            logging.error(message)
+        return HttpResponse(message)
 
-        newBid = Bid(
-            auctionid = auction.id, 
-            itemid = id, 
-            username = username, 
-            amount = amount
-        )
-        newBid.save()
-        auction.auction1 = amount
-        auction.save()
-        logging.info(f'Bid for Item "{id}" with amount {amount} submitted for {username}')
+    newBid = Bid(
+        auctionid = auction.id, 
+        itemid = id, 
+        username = username, 
+        amount = amount
+    )
+    newBid.save()
+    auction.auction1 = amount
+    auction.save()
+    logging.info(f'Bid for Item "{id}" with amount {amount} submitted for {username}')
 
     return HttpResponse('')
 

@@ -12,7 +12,7 @@
         <h4>{{item.name}}</h4>
         <img src="{{item.image}}" alt="{{item.name}}" />
         <div class="biditem-p" id="close-in">
-          Closes in: <span id="bid-time" hx-get="{% url 'auctions:getBidClosingTime' item.id %}" hx-trigger="every 2s"
+          Closes in: <span id="bid-time" hx-get="{% url 'auctions:getBidClosingTime' item.id %}" hx-trigger="every 1s"
             hx-target="#bid-time"></span>
         </div>
         <p>Seller: <strong>{{item.username}}</strong></p>
