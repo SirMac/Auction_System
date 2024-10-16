@@ -17,7 +17,8 @@
             <h4>{{item.name}}</h4>
             <!-- <p>item.minimumbid</p> -->
             <p>Started: {{item.createdat}}</p>
-            <div class="product-status">Status: {{item.status}}</div>
+            <p>Lot No.: <strong>{{item.id}}</strong></p>
+            <div class="product-status">Status: <strong>{{item.status}}</strong></div>
             <div class="btn-div">
                 <a class="bid-btn" href="{% url 'auctions:bidItem' item.id %}">
                     {% if pageType and pageType == 'soldItems' %}
@@ -32,7 +33,7 @@
         {% endfor %}
         {% else %}
     </div>
-    <div class="auction-notice">No items available</div>
+    <div class="auction-notice">No item available</div>
     {% endif %}
 </section>
 {% endblock %}

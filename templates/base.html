@@ -87,7 +87,13 @@
     user && (user.onclick = function (e) {
       let logoutBlock = document.getElementById('user-settings')
       let displayState = logoutBlock.style.display
-      displayState !== 'block' ? logoutBlock.style.display = 'block' : logoutBlock.style.display = 'none'
+      logoutBlock.style.display = 'none'
+      if(displayState !== 'block'){
+        logoutBlock.style.display = 'block' 
+        setTimeout(() => {
+          logoutBlock.style.display = 'none'
+        }, 5000);
+      }
     })
     
     let modalTemplate = document.getElementById('modal-template');

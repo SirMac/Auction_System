@@ -99,7 +99,7 @@ def getLiveBidDetail(req, id):
     else:
         bidList = "<ul>"
         for bid in bids:
-            bidList += f'<li>Competing Bid: ${bid.amount}<li>'
+            bidList += f"<li><span class='bid-date'>{bid.createdat.strftime('%Y-%m-%d %H:%M:%S')}</span> Competing bid ({bid.username}): <span class='bid-amount'>${bid.amount}</span><li>"
         bidList += '<ul>'
         winner = getBidWinner(id)
         if winner:

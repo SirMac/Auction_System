@@ -15,7 +15,9 @@
           Closes in: <span id="bid-time" hx-get="{% url 'auctions:getBidClosingTime' item.id %}" hx-trigger="every 2s"
             hx-target="#bid-time"></span>
         </div>
-        <p>Starting Price: {{item.minimumbid}}</p>
+        <p>Seller: <strong>{{item.username}}</strong></p>
+        <p>Starting Price: <strong>${{item.minimumbid}}</strong></p>
+        <p>Start Date: <strong>{{item.createdat}}</strong></p>
         <p>Description: {{item.description}}</p>
       </div>
       {% endif %}

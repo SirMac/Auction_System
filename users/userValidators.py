@@ -44,27 +44,47 @@ class ValidateUserDeregistration:
         self.username = username
         self.validateActiveItemOnAuction()
         self.validateActiveBid()
+        self.validateAdminUser()
+
+
+
+    def validateAdminUser(self):
+        if self.username.lower() == 'admin':
+            message = 'Cannot deregister admin account'
+            logging.error(message)
+            self.errorMessages.append(message)
+
 
     def validateActiveItemOnAuction(self):
         try:
-            item = Item.objects.filter(username=self.username, status='opened')[0]
+            item = Item.objects.filter(username=self.username, status='opened')
         except KeyError as e:
             logging.error(str(e))
         else:
-            if item.status != 'close':
-                message = f"Deregistration failed. You have an active item, '{item.name}' on auction"
-                logging.error(message)
-                self.errorMessages.append(message)
+            if len(item) <= 0:
+                return
+            item = item[0]
+            if item.status == 'close':
+                return
+            message = f"Deregistration failed. You have an active item, '{item.name}' on auction"
+            logging.error(message)
+            self.errorMessages.append(message)
 
 
 
     def validateActiveBid(self):
+        auction = []
         try:
-            item = Item.objects.filter(username=self.username, status='opened')[0]
-            auction = Auction.objects.filter(itemid=item.id)[0]
+            item = Item.objects.filter(username=self.username, status='opened')
+            if len(item) > 0:
+                item = item[0]
+                auction = Auction.objects.filter(itemid=item.id)
         except KeyError as e:
             logging.error(str(e))
         else:
+            if len(auction) <= 0:
+                return
+            auction = auction[0]
             highestBid = getHighestBid(auction.id)
             if highestBid and highestBid.username == self.username:
                 message = f"Deregistration failed. You are the highest bidder for the item, '{item.name}' on auction"

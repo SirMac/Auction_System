@@ -145,11 +145,13 @@ def getBidEndDateFromNow(timezone):
 
 def getHighestBid(auctionid):
     try:
-        bid = Bid.objects.filter(auctionid=auctionid).order_by('-amount','createdat')[0]
+        bid = Bid.objects.filter(auctionid=auctionid).order_by('-amount','createdat')
     except:
         return 0
     else:
-        return bid
+        if len(bid) <= 0:
+            return 0
+        return bid[0]
 
 
 
@@ -286,8 +288,14 @@ def getNotificationList(user):
     else:
         setNotificationStatus(sellerNotification)
         setNotificationStatus(winnerNotification)
-        notificationHtml = getNotificationHtml(sellerNotification, 'Seller Notification', 'seller')
-        notificationHtml += getNotificationHtml(winnerNotification, 'Winner Notification', 'winner')
+        notificationHtml = getNotificationHtml(
+            sellerNotification, 
+            {'title':'Seller Notification', 'type':'seller'}
+        )
+        notificationHtml += getNotificationHtml(
+            winnerNotification, 
+            {'title':'Winner Notification', 'type':'winner'}
+        )
         if len(notificationHtml) == 0:
             return HttpResponse('Notification not found')
         return HttpResponse(notificationHtml)
@@ -303,7 +311,41 @@ def setNotificationStatus(notificationRecord):
 
 
 
-def getNotificationHtml(notificationList, title, type):
+
+def getNotificationHtml(notificationList, options):
+    title = options['title']
+    type = options['type']
+    if len(notificationList) == 0 or not title:
+        return ''
+    
+    notificationHtml = f"<div class='notification-tbl-main'>"
+    notificationHtml += "<table id='notification-table'>"
+    notificationHtml += '<thead>'
+    notificationHtml += '<tr>'
+    notificationHtml += f'<th colspan=100>{title}</th>'
+    notificationHtml += '</tr>'
+    notificationHtml += '</thead>'
+    notificationHtml += '<tbody>'
+    for notification in notificationList:
+        formatedDate = (notification.bidtime).strftime('%Y-%m-%d')
+        item = getRecordByPk(Item, notification.itemid)
+        if item:
+            item = item.name
+        else:
+            item = '---'
+        notificationHtml += "<tr class='notification-body-tr'>"
+        if type == 'seller':
+            notificationHtml += f"<td colspan=100>* <strong>{formatedDate}</strong>: Your item '{item}' on lot {notification.itemid} is won by <strong>{notification.winner}</strong>.</td>"
+        else:
+            notificationHtml += f"<td colspan=100>* <strong>{formatedDate}</strong>: You have won bid for item '{item}' on lot {notification.itemid}.</td>"
+        notificationHtml += '</tr>'
+    notificationHtml += '</tbody>'
+    notificationHtml += '</table>'
+    notificationHtml += '</div>'
+    return notificationHtml
+
+
+def getNotificationHtmlTbl(notificationList, title, type):
 
     if len(notificationList) == 0:
         return ''
