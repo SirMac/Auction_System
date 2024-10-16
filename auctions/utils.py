@@ -73,7 +73,7 @@ def addNewBid(req, id):
         auction.save()
         logging.info(f'Bid for Item "{id}" with amount {amount} submitted for {username}')
 
-    return HttpResponse(f"Bid amount {amount} submitted for {username}")
+    return HttpResponse('')
 
 
 

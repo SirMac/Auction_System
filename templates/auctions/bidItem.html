@@ -26,7 +26,7 @@
         <div class="bid-list" hx-get="{% url 'auctions:getLiveBid' item.id %}" hx-trigger="every 1s"
         hx-target=".bid-list"></div>
         {% if item.status != 'closed' %}
-        <form class="bid-detail" hx-post="{% url 'auctions:bidItem' item.id %}" hx-target="#post-response">
+        <form class="bid-detail" hx-post="{% url 'auctions:bidItem' item.id %}" hx-target="#bid-response">
           {% csrf_token %}
           <input class="input" name="amount" type="number">
           <input class="hidden" name="username" value="{{item.username}}">
@@ -34,7 +34,7 @@
           <input class="hidden" name="id" value="{{item.id}}">
           <button type="submit" class="btn">Bid</button>
           </form>
-          <div id="post-response" class="display-none"></div>
+          <div id="bid-response" class="display-nonez"></div>
         {% endif %}
       </div>
     </div>

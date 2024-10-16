@@ -329,6 +329,8 @@ nav {
   border-radius: 6px;
   outline: none;
   background-color: rgba(0, 0, 255, 0.4);
+  z-index: 10;
+  position: relative;
 }
 
 .client__content {
@@ -646,6 +648,17 @@ nav {
 }
 
 
+.bid-detail {
+  margin:20px 0
+}
+
+
+#bid-response {
+  font-size: 13px;
+  color: brown;
+}
+
+
 #bid-winner {
   color: green;
   padding: 10px 0;
@@ -675,10 +688,6 @@ nav {
 
 .hidden {
   display: none;
-}
-
-.bid-detail {
-  margin:20px 0
 }
 
 
