@@ -16,13 +16,14 @@ import logging
 def index(req):
     # items = getAllRecords(Item)
     # filteredItem = [item for item in items if getAuctionByItemId(item.id, 'status') == 'opened']
+    context = {'pageOptions':{'page':'index', 'buttonLabel':'Bid'}}
     try:
         filteredItems = Item.objects.filter(status='opened')
     except:
         logging.error('Index: items not found')
-        return render(req, 'auctions/index.html')
+        return render(req, 'auctions/index.html', context=context)
     else:
-        context = {'items': filteredItems}
+        context['items'] = filteredItems
         return render(req, 'auctions/index.html', context=context)
     
 
@@ -37,16 +38,24 @@ def addItem(req):
 
 @login_required
 def bidItem(req, id):
-    
     if req.method == 'GET':
+      page = req.GET.get('page')
+      triggers = {'index':'every 1s', 'soldItems':'load'}
+      trigger = triggers[page]
+
+      if not trigger:
+          trigger = 'every 1s'
+
       bids = None
       auction = getAuctionByItemId(id)
+
       try:
           bids = Bid.objects.filter(auctionid=auction.id)
       except:
           logging.error(f'Item does not exist')
+          
       item = getRecordByPk(Item, id)
-      context = {'item': item, 'bids':bids}
+      context = {'item': item, 'bids':bids, 'pageOptions':{'trigger':triggers[page]}}
       return render(req, 'auctions/bidItem.html', context=context)
 
     return addNewBid(req, id)
@@ -146,7 +155,7 @@ def getSelectHtml(req):
 
 
 def getSoldItems(req):
-    context = {'pageType':'soldItems'}
+    context = {'pageOptions':{'page':'soldItems', 'buttonLabel':'View'}}
     try:
         filteredItems = Item.objects.filter(status='closed')
     except:

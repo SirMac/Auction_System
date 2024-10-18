@@ -12,7 +12,7 @@
         <h4>{{item.name}}</h4>
         <img src="{{item.image}}" alt="{{item.name}}" />
         <div class="biditem-p" id="close-in">
-          Closes in: <span id="bid-time" hx-get="{% url 'auctions:getBidClosingTime' item.id %}" hx-trigger="every 1s"
+          Closes in: <span id="bid-time" hx-get="{% url 'auctions:getBidClosingTime' item.id %}" hx-trigger="{{pageOptions.trigger}}"
             hx-target="#bid-time"></span>
         </div>
         <p>Seller: <strong>{{item.username}}</strong></p>
@@ -23,7 +23,7 @@
       {% endif %}
 
       <div class="bid-info product__card" id="bid-info">
-        <div class="bid-list" hx-get="{% url 'auctions:getLiveBid' item.id %}" hx-trigger="every 1s"
+        <div class="bid-list" hx-get="{% url 'auctions:getLiveBid' item.id %}" hx-trigger="{{pageOptions.trigger}}"
         hx-target=".bid-list"></div>
         {% if item.status != 'closed' %}
         <form class="bid-detail" hx-post="{% url 'auctions:bidItem' item.id %}" hx-target="#bid-response">
