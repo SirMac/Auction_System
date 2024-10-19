@@ -85,7 +85,6 @@ def deregisterUser(req):
     messages = deregisterValidation.errorMessages
     
     if messages:
-        print('message-len:', len(messages))
         message = messages[len(messages)-1]
         # for message in messages:
         logging.error(message)

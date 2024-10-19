@@ -14,8 +14,6 @@ import logging
 
 # @login_required
 def index(req):
-    # items = getAllRecords(Item)
-    # filteredItem = [item for item in items if getAuctionByItemId(item.id, 'status') == 'opened']
     context = {'pageOptions':{'page':'index', 'buttonLabel':'Bid'}}
     try:
         filteredItems = Item.objects.filter(status='opened')

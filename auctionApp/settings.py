@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-lh&t0t@n$3otk1ws$dwi%lstvrhm*w_&^76o-ej7mlb9fjky9&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_session_timeout.middleware.SessionTimeoutMiddleware',
+    'auctionApp.middleware.handleServerErrors.ExceptionMiddleware'
 ]
 
 ROOT_URLCONF = 'auctionApp.urls'
@@ -128,3 +129,60 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '[contactor] %(levelname)s %(asctime)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG'
+        },
+       'sysFile': {
+           'level': 'DEBUG',
+           'class': 'logging.FileHandler',
+           'filename': 'logs/system.log',
+           'formatter': 'verbose',
+           'filters': ['require_debug_false'],
+
+       },
+       'errorFile': {
+           'level': 'ERROR',
+           'class': 'logging.FileHandler',
+           'filename': 'logs/error.log',
+           'formatter': 'verbose',
+           'filters': ['require_debug_false'],
+
+       },
+       'warningFile': {
+           'level': 'WARNING',
+           'class': 'logging.FileHandler',
+           'filename': 'logs/error.log',
+           'formatter': 'verbose',
+           'filters': ['require_debug_false'],
+
+       },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['errorFile','warningFile'],
+            'propagate': False
+        },
+        
+    },
+    "root": {
+        "handlers": ["errorFile", 'warningFile']
+    },
+}
