@@ -14,3 +14,11 @@
 [contactor] ERROR 2024-10-20 13:51:58,968 Bid amount cannot be less than starting price, 310
 [contactor] ERROR 2024-10-20 13:52:22,050 Bid amount cannot be less than starting price, 310
 [contactor] ERROR 2024-10-20 13:52:22,050 Bid amount cannot be less than starting price, 310
+[contactor] ERROR 2024-10-20 16:22:38,185 Page not found for GET /
+[contactor] ERROR 2024-10-20 16:22:38,185 Page not found for GET /
+[contactor] ERROR 2024-10-20 16:23:01,490 Invalid username/password
+[contactor] ERROR 2024-10-20 16:23:01,490 Invalid username/password
+[contactor] ERROR 2024-10-20 16:24:58,882 Page not found for GET /
+[contactor] ERROR 2024-10-20 16:24:58,882 Page not found for GET /
+[contactor] ERROR 2024-10-20 16:25:18,539 getSelectHtml: record not found for category
+[contactor] ERROR 2024-10-20 16:25:18,539 getSelectHtml: record not found for category
