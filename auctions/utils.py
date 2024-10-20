@@ -42,7 +42,7 @@ def addNewItem(req):
         status = 'opened'
     )
     newItem.save()
-    success(request=req, message=f'Item "{name}" created successfully')
+    success(request=req, message=f'Item "{name}" successfully added for auction')
     addAuction(newItem.id)
     return redirect('auctions:index')
 

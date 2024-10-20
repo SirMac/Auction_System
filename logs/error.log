@@ -4,3 +4,13 @@
 [contactor] ERROR 2024-10-19 14:07:54,898 Deregistration failed. You are the highest bidder for an ongoing auction on lot '16' 
 [contactor] ERROR 2024-10-19 14:07:54,899 Deregistration failed. You are the highest bidder for an ongoing auction on lot '16' 
 [contactor] ERROR 2024-10-19 14:07:54,899 Deregistration failed. You are the highest bidder for an ongoing auction on lot '16' 
+[contactor] ERROR 2024-10-20 13:36:53,191 Page not found for GET /
+[contactor] ERROR 2024-10-20 13:36:53,191 Page not found for GET /
+[contactor] WARNING 2024-10-20 13:36:54,384 Not Found: /favicon.ico
+[contactor] WARNING 2024-10-20 13:36:54,385 "GET /favicon.ico HTTP/1.1" 404 179
+[contactor] ERROR 2024-10-20 13:47:32,917 Amount cannot be less than starting price
+[contactor] ERROR 2024-10-20 13:47:32,917 Amount cannot be less than starting price
+[contactor] ERROR 2024-10-20 13:51:58,968 Bid amount cannot be less than starting price, 310
+[contactor] ERROR 2024-10-20 13:51:58,968 Bid amount cannot be less than starting price, 310
+[contactor] ERROR 2024-10-20 13:52:22,050 Bid amount cannot be less than starting price, 310
+[contactor] ERROR 2024-10-20 13:52:22,050 Bid amount cannot be less than starting price, 310

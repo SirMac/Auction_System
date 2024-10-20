@@ -57,14 +57,14 @@ class ValidateBid:
         return self.errorMessages.append(f'The field "{numberField}" must be numeic')
 
   def validateMinimumBid(self, userData):
-    if int(userData['minimumbid']) > int(userData.get('amount')):
-      return self.errorMessages.append(f'Amount cannot be less than starting price')
+    if int(userData.get('minimumbid')) > int(userData.get('amount')):
+      return self.errorMessages.append(f"Bid amount cannot be less than starting price, {userData.get('minimumbid')}")
 
   def validateHighestBid(self, userData):
     id = userData.get('id')
     if id:
       auction = get_object_or_404(Auction, itemid=id)
       if self.toInt(auction.auction1) > self.toInt(userData.get('amount')):
-        return self.errorMessages.append(f'Amount cannot be less than highest bidded price, {auction.auction1}')
+        return self.errorMessages.append(f'Bid amount cannot be less than the highest bid, {auction.auction1}')
     else:
       self.errorMessages.append(f'An error occured. Try again later.')
