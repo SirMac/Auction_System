@@ -82,9 +82,12 @@ class ValidateUserDeregistration:
                 logging.error('validateActiveBid: Auction not found')
                 return
             
+            message = ''
             for auction in auctions:
                 highestBid = getHighestBid(auction.id)
                 if highestBid and highestBid.username == self.username:
                     message = f"Deregistration failed. You are the highest bidder for an ongoing auction on lot '{auction.itemid}' "
-            logging.error(message)
-            self.errorMessages.append(message)
+           
+            if message:
+                logging.error(message)
+                self.errorMessages.append(message)

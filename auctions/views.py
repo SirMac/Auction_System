@@ -14,7 +14,7 @@ import logging
 
 # @login_required
 def index(req):
-    context = {'pageOptions':{'page':'index', 'buttonLabel':'Bid'}}
+    context = {'pageOptions':{'page':'index', 'buttonLabel':'Bid', 'header':'Items On Auction'}}
     try:
         filteredItems = Item.objects.filter(status='opened')
     except:
@@ -153,7 +153,7 @@ def getSelectHtml(req):
 
 
 def getSoldItems(req):
-    context = {'pageOptions':{'page':'soldItems', 'buttonLabel':'View'}}
+    context = {'pageOptions':{'page':'soldItems', 'buttonLabel':'View', 'header':'Sold Items'}}
     try:
         filteredItems = Item.objects.filter(status='closed')
     except:

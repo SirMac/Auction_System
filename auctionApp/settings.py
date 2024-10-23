@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'auctionApp.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'koyebdb': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'koyebdb',
         'USER': 'postgres',
@@ -90,7 +90,7 @@ DATABASES = {
         'HOST': 'ep-steep-water-a23rfiul.eu-central-1.pg.koyeb.app',
         'OPTIONS': {'sslmode': 'require'},
     },
-    'sqlite3': {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
