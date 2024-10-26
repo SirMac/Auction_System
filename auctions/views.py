@@ -7,7 +7,9 @@ from .utils import addNewItem, getAllRecords, getAuctionByItemId
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .utils import handleAuctionClosure, hasAuctionClosed, getNotificationCount
 from .utils import getNotificationList, getRecordByPk, getBidWinner, addNewAuction
+from .utils import addNewParticipant
 from .models import Auction, Item, Bid, Category, SubCategory
+from django.contrib.auth.models import User
 import logging
 
 
@@ -25,27 +27,36 @@ def index(req):
         return render(req, 'auctions/index.html', context=context)
     
 
-
-@login_required
-def auctionIndex(req, id):
-    context = {'pageOptions':{'page':'auctionIndex', 'buttonLabel':'Bid', 'header':'Items On Auction'}}
-    try:
-        filteredItems = Item.objects.filter(auctionid=id, status='opened')
-    except:
-        logging.error('Index: items not found')
-        return render(req, 'auctions/auction.html', context=context)
-    else:
-        context['items'] = filteredItems
-        return render(req, 'auctions/auction.html', context=context)
-    
-
-
 @login_required
 def addAuction(req):
     if req.method == 'GET':
         return render(req, 'auctions/addAuction.html')
     
     return addNewAuction(req)
+
+
+
+@login_required
+def auctionIndex(req, id):
+    context = {'pageOptions':{'auctionid':id, 'page':'auctionIndex', 'buttonLabel':'Bid', 'header':'Items On Auction'}}
+    try:
+        filteredItems = Item.objects.filter(auctionid=id, status='opened')
+    except:
+        logging.error('Index: items not found')
+        return render(req, 'auctions/auctionIndex.html', context=context)
+    else:
+        context['items'] = filteredItems
+        return render(req, 'auctions/auctionIndex.html', context=context)
+    
+
+
+@login_required
+def addParticipant(req, id):
+    context = {'pageOptions':{'auctionid':id}}
+    if req.method == 'GET':
+        return render(req, 'auctions/addParticipant.html', context=context)
+    
+    return addNewParticipant(req, id)
 
 
 
@@ -142,21 +153,33 @@ def getLiveBidDetail(req, id):
 def getSelectHtml(req):
     tableName = req.GET.get('target').lower()
     categoryId = req.GET.get('categoryid')
-    models = {'category':Category, 'subcategory':SubCategory} 
+    modelOptions = {
+        'category':{'model':Category, 'label':'name'}, 
+        'subcategory':{'model':SubCategory, 'filterKwargs':{'categoryid':categoryId}, 'label':'name'}, 
+        'user':{'model':User, 'filterKwargs':{'is_active':1}, 'label':'username'}
+    } 
     select = "<option value=''>---</option>"
 
     if not tableName:
         logging.error('getSelectHtml: request query string empty')
         return HttpResponse(select)
     
-    model = models[tableName]
+    modelOption = modelOptions[tableName]
+
+    if not modelOption:
+        logging.error(f'getSelectHtml: modelOption not found for {tableName}')
+        return HttpResponse(select)
+    
+    model = modelOption['model']
 
     if not model:
         logging.error(f'getSelectHtml: model not found for {tableName}')
         return HttpResponse(select)
     
-    if categoryId:
-        records = model.objects.filter(categoryid=categoryId)
+    filterKwargs = modelOption['filterKwargs']
+
+    if filterKwargs:
+        records = model.objects.filter(**filterKwargs)
     else:
         records = getAllRecords(model)
 
@@ -164,9 +187,11 @@ def getSelectHtml(req):
         logging.error(f'getSelectHtml: record not found for {tableName}')
         return HttpResponse(select)
     
+    label = modelOption['label']
+
     for record in records:
         select += f"<option value='{record.id}'>"
-        select += record.name
+        select += getattr(record, label)
         select += '</option>'
 
     return HttpResponse(select)

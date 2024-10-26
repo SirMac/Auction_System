@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from .models import Auction
+from .models import Auction, Participant
 import logging
 
 class ValidateAuction:
@@ -68,3 +68,24 @@ class ValidateBid:
         return self.errorMessages.append(f'Bid amount cannot be less than the highest bid, {auction.auction1}')
     else:
       self.errorMessages.append(f'An error occured. Try again later.')
+
+
+
+
+class ValidateParticipant:
+  def __init__(self, username):
+    self.errorMessages = []
+    self.validateDuplicateUsername(username)
+
+
+  def validateDuplicateUsername(self, username):
+    try:
+      participant = Participant.objects.get(username=username)
+    except:
+      message = f'Username "{username}" does not exist'
+      logging.error(message)
+    else:
+      if participant:
+        message = f'<div class="error">Participant with username "{username}" already added</div>'
+        logging.error(message)
+        return self.errorMessages.append(message)

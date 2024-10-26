@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+<section class="section__container product__container" id="product">
+    <nav>
+        <ul class="nav__links" id="nav-links">
+            <li><a href="{% url 'auctions:addParticipant' pageOptions.auctionid %}">Add Participant</a></li>
+            <li><a href="{% url 'auctions:addAuction' %}">List participant</a></li>
+            <li><a href="{% url 'auctions:addAuction' %}">Add Item</a></li>
+          </ul>
+    </nav>
+    {% block auction_content %}{% endblock %}
+</section>
+{% endblock %}

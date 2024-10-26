@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends "auctions/auctionBase.html" %}
 
 
 
-{% block content %}
-<section class="section__container product__container" id="product">
+{% block auction_content %}
+<div>
     {% include "auctions/message.html" %}
     {% if items and pageOptions %}
     <h4 class="section__header">{{pageOptions.header}}</h4>
@@ -27,5 +27,5 @@
     </div>
     <div class="auction-notice">No item available</div>
     {% endif %}
-</section>
+</div>
 {% endblock %}

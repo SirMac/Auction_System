@@ -74,9 +74,9 @@ body {
   transition: 0.4s;
   height: 50px;
   width: 100%;
-  padding: 0 15px;
+  padding: 0 10px;
   font-size: 17px;
-  margin-bottom: 1.3rem;
+  margin-bottom: 1.0rem;
   border: 1px solid #ddd;
   border-radius: 6px;
   outline: none;

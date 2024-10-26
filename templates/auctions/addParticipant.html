@@ -1,0 +1,31 @@
+{% extends "auctions/auctionBase.html" %}
+
+
+
+{% block auction_content %}
+
+<div
+  hx-get="{% url 'auctions:getSelect' %}?target=user"
+  hx-trigger="load"
+  hx-target="#participant"
+></div>
+
+<div class="addContact container_main">
+  <div class="registration form">
+    <header>Add Participant</header>
+    <form hx-post="{% url 'auctions:addParticipant' pageOptions.auctionid %}" hx-target=".participant-msg" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="auction-flex">
+        <select name="username" id="participant"></select>
+        <!-- <input type="text" required name="status" placeholder="status"> -->
+      </div>
+
+      {% include "auctions/message.html" %}
+      <div class="participant-msg success"></div>
+      <button type="submit" class="button">Submit</button>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

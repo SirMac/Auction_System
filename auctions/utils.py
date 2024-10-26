@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.messages import error, success
 from django.urls import reverse
-from .auctionValidators import ValidateAuction, ValidateBid
+from .auctionValidators import ValidateAuction, ValidateBid, ValidateParticipant
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from time import strftime, gmtime
 from datetime import datetime
 from django.utils import timezone
-from .models import Item, Bid, Auction, Notification
+from .models import Item, Bid, Auction, Notification, Participant
+from django.contrib.auth.models import User
 import logging
 
 
@@ -30,7 +31,34 @@ def addNewAuction(req):
 
 
 
-def addNewItem(req):
+def addNewParticipant(req, id):
+    userid = req.POST.get('username')
+    username = getRecordByPk(User, userid)
+
+    if not username:
+        logging.error('addNewParticipant: Username not found')
+        return HttpResponse('Username not found')
+    
+    validParticipant = ValidateParticipant(username)
+    messages = validParticipant.errorMessages
+    
+    if messages:
+        for message in messages:
+            logging.error(message)
+        return HttpResponse(message)
+
+    newParticipant = Participant(
+        auctionid = id,
+        username = username,
+        status = 'active'
+    )
+    newParticipant.save()
+    logging.info(f'Participant "{newParticipant.id}" created successfully')
+    return HttpResponse(f"New participant '{username}' added successfully")
+
+
+
+def addNewItem(req, id):
     name = req.POST.get('name')
     description = req.POST.get('description')
     categoryid = req.POST.get('categoryid')
@@ -65,7 +93,7 @@ def addNewItem(req):
     newItem.save()
     success(request=req, message=f'Item "{name}" successfully added for auction')
     # addAuction(newItem.id)
-    return redirect('auctions:index')
+    return redirect('auctions:auctionIndex', id=id)
 
 
 

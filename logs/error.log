@@ -1,36 +1,22 @@
-[contactor] ERROR 2024-10-23 13:04:06,962 Deregistration failed. You have an active item, 'Bag' on auction
-[contactor] ERROR 2024-10-23 13:04:06,962 Deregistration failed. You have an active item, 'Bag' on auction
-[contactor] ERROR 2024-10-23 13:04:06,965 Deregistration failed. You have an active item, 'Bag' on auction
-[contactor] ERROR 2024-10-23 13:04:06,965 Deregistration failed. You have an active item, 'Bag' on auction
-[contactor] ERROR 2024-10-23 13:04:18,562 Deregistration failed. You have an active item, 'Bag' on auction
-[contactor] ERROR 2024-10-23 13:04:18,562 Deregistration failed. You have an active item, 'Bag' on auction
-[contactor] ERROR 2024-10-23 13:04:18,569 Deregistration failed. You have an active item, 'Bag' on auction
-[contactor] ERROR 2024-10-23 13:04:18,569 Deregistration failed. You have an active item, 'Bag' on auction
-[contactor] ERROR 2024-10-26 13:59:33,887 Page not found for GET /
-[contactor] ERROR 2024-10-26 13:59:33,887 Page not found for GET /
-[contactor] WARNING 2024-10-26 13:59:35,093 Not Found: /favicon.ico
-[contactor] WARNING 2024-10-26 13:59:35,094 "GET /favicon.ico HTTP/1.1" 404 179
-[contactor] ERROR 2024-10-26 14:25:40,224 getSelectHtml: record not found for category
-[contactor] ERROR 2024-10-26 14:25:40,224 getSelectHtml: record not found for category
-[contactor] ERROR 2024-10-26 14:28:52,091 Internal Server Error: //auction
-Traceback (most recent call last):
-  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/base.py", line 204, in _get_response
-    self.check_response(response, callback)
-  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/base.py", line 332, in check_response
-    raise ValueError(
-ValueError: The view auctions.views.addAuction didn't return an HttpResponse object. It returned None instead.
-[contactor] ERROR 2024-10-26 14:28:52,091 Internal Server Error: //auction
-Traceback (most recent call last):
-  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/base.py", line 204, in _get_response
-    self.check_response(response, callback)
-  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/base.py", line 332, in check_response
-    raise ValueError(
-ValueError: The view auctions.views.addAuction didn't return an HttpResponse object. It returned None instead.
-[contactor] ERROR 2024-10-26 14:28:52,093 Server error (500) for POST //auction
-[contactor] ERROR 2024-10-26 14:28:52,093 Server error (500) for POST //auction
+[contactor] ERROR 2024-10-26 18:52:01,186 Page not found for GET ///
+[contactor] ERROR 2024-10-26 18:52:01,186 Page not found for GET ///
+[contactor] ERROR 2024-10-26 18:52:33,670 Page not found for GET //
+[contactor] ERROR 2024-10-26 18:52:33,670 Page not found for GET //
+[contactor] ERROR 2024-10-26 19:29:52,415 Username "demo" does not exist
+[contactor] ERROR 2024-10-26 19:29:52,415 Username "demo" does not exist
+[contactor] ERROR 2024-10-26 19:29:52,416 Username "demo" does not exist
+[contactor] ERROR 2024-10-26 19:29:52,416 Username "demo" does not exist
+[contactor] ERROR 2024-10-26 19:31:56,415 Username "demo" does not exist
+[contactor] ERROR 2024-10-26 19:31:56,415 Username "demo" does not exist
+[contactor] ERROR 2024-10-26 19:31:59,898 Participant with username "demo" already added
+[contactor] ERROR 2024-10-26 19:31:59,898 Participant with username "demo" already added
+[contactor] ERROR 2024-10-26 19:31:59,899 Participant with username "demo" already added
+[contactor] ERROR 2024-10-26 19:31:59,899 Participant with username "demo" already added
+[contactor] ERROR 2024-10-26 19:33:20,646 <div class="error">Participant with username "demo" already added</div>
+[contactor] ERROR 2024-10-26 19:33:20,646 <div class="error">Participant with username "demo" already added</div>
+[contactor] ERROR 2024-10-26 19:33:20,647 <div class="error">Participant with username "demo" already added</div>
+[contactor] ERROR 2024-10-26 19:33:20,647 <div class="error">Participant with username "demo" already added</div>
+[contactor] ERROR 2024-10-26 19:34:41,540 <div class="error">Participant with username "demo" already added</div>
+[contactor] ERROR 2024-10-26 19:34:41,540 <div class="error">Participant with username "demo" already added</div>
+[contactor] ERROR 2024-10-26 19:34:41,540 <div class="error">Participant with username "demo" already added</div>
+[contactor] ERROR 2024-10-26 19:34:41,540 <div class="error">Participant with username "demo" already added</div>
