@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="addContact container_main">
+  <div class="registration form">
+    <header>Add Auction</header>
+    <form action="{% url 'auctions:addAuction' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="auction-flex">
+        <input type="text" required name="name" placeholder="Auction Name">
+        <input type="number" required name="maxparticipant" placeholder="Maximum participant">
+        <input type="text" required name="description" placeholder="Description">
+      </div>
+
+      {% include "auctions/message.html" %}
+
+      <button type="submit" class="button">Submit</button>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

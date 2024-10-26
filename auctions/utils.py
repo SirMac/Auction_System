@@ -11,6 +11,25 @@ from .models import Item, Bid, Auction, Notification
 import logging
 
 
+
+
+def addNewAuction(req):
+    name = req.POST.get('name')
+    description = req.POST.get('description')
+    maxparticipant = req.POST.get('maxparticipant')
+    newAuction = Auction(
+        name = name,
+        description = description, 
+        maxparticipant = maxparticipant,
+        status = 'opened'
+    )
+    newAuction.save()
+    logging.info(f'Auction "{newAuction.id}" created successfully')
+    success(request=req, message=f'New auction created successfully')
+    return redirect('auctions:index')
+
+
+
 def addNewItem(req):
     name = req.POST.get('name')
     description = req.POST.get('description')
@@ -28,6 +47,8 @@ def addNewItem(req):
             error(request=req, message=message)
         return redirect('auctions:addItem')
 
+    # endate = getBidEndDateFromNow(timezone)
+
     fs = FileSystemStorage()
     itemName = fs.save(itemImage.name, itemImage)
 
@@ -43,7 +64,7 @@ def addNewItem(req):
     )
     newItem.save()
     success(request=req, message=f'Item "{name}" successfully added for auction')
-    addAuction(newItem.id)
+    # addAuction(newItem.id)
     return redirect('auctions:index')
 
 
@@ -76,19 +97,6 @@ def addNewBid(req, id):
     logging.info(f'Bid for Item "{id}" with amount {amount} submitted for {username}')
 
     return HttpResponse('')
-
-
-
-def addAuction(itemid):
-    endate = getBidEndDateFromNow(timezone)
-    newAuction = Auction(
-        itemid = itemid, 
-        endat = endate,
-        status = 'opened'
-    )
-    newAuction.save()
-    logging.info(f'Auction for Item "{itemid}" created successfully')
-
 
 
 

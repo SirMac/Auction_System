@@ -6,3 +6,31 @@
 [contactor] ERROR 2024-10-23 13:04:18,562 Deregistration failed. You have an active item, 'Bag' on auction
 [contactor] ERROR 2024-10-23 13:04:18,569 Deregistration failed. You have an active item, 'Bag' on auction
 [contactor] ERROR 2024-10-23 13:04:18,569 Deregistration failed. You have an active item, 'Bag' on auction
+[contactor] ERROR 2024-10-26 13:59:33,887 Page not found for GET /
+[contactor] ERROR 2024-10-26 13:59:33,887 Page not found for GET /
+[contactor] WARNING 2024-10-26 13:59:35,093 Not Found: /favicon.ico
+[contactor] WARNING 2024-10-26 13:59:35,094 "GET /favicon.ico HTTP/1.1" 404 179
+[contactor] ERROR 2024-10-26 14:25:40,224 getSelectHtml: record not found for category
+[contactor] ERROR 2024-10-26 14:25:40,224 getSelectHtml: record not found for category
+[contactor] ERROR 2024-10-26 14:28:52,091 Internal Server Error: //auction
+Traceback (most recent call last):
+  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view auctions.views.addAuction didn't return an HttpResponse object. It returned None instead.
+[contactor] ERROR 2024-10-26 14:28:52,091 Internal Server Error: //auction
+Traceback (most recent call last):
+  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "/home/mac/Documents/Projects/python/venv/venvAuctionSys/lib/python3.11/site-packages/django/core/handlers/base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view auctions.views.addAuction didn't return an HttpResponse object. It returned None instead.
+[contactor] ERROR 2024-10-26 14:28:52,093 Server error (500) for POST //auction
+[contactor] ERROR 2024-10-26 14:28:52,093 Server error (500) for POST //auction

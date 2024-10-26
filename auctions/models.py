@@ -4,8 +4,9 @@ from django.utils import timezone
 
 
 class Auction(models.Model):
+    name = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
-    status = models.CharField(max_length=200, default='open')
+    status = models.CharField(max_length=200, default='opened')
     auction1 = models.CharField(max_length=200, default='0')
     maxparticipant = models.CharField(max_length=200, default='0')
     createdat = models.DateTimeField(default=timezone.now)
@@ -19,7 +20,7 @@ class Item(models.Model):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
     categoryid = models.CharField(max_length=200)
-    subcategoryid = models.CharField(max_length=200, default='1')
+    subcategoryid = models.CharField(max_length=200)
     status = models.CharField(max_length=200)
     minimumbid = models.IntegerField()
     username = models.CharField(max_length=200)

@@ -856,6 +856,14 @@ nav {
 }
 
 
+.auction-flex {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content:space-between;
+  align-items: center;
+}
+
 
 .upper {
     text-transform: uppercase;

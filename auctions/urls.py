@@ -5,7 +5,9 @@ app_name = 'auctions'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('create', views.addItem, name='addItem'),
+    path('auction/<int:id>/', views.auctionIndex, name='auctionIndex'),
+    path('auction', views.addAuction, name='addAuction'),
+    path('item', views.addItem, name='addItem'),
     path('lot/<int:id>/', views.bidItem, name='bidItem'),
     path('lot/time/<int:id>/', views.getBidClosingTime, name='getBidClosingTime'),
     path('lot/live-bid/<int:id>/', views.getLiveBidDetail, name='getLiveBid'),

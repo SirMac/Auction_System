@@ -6,24 +6,47 @@ from time import strftime
 from .utils import addNewItem, getAllRecords, getAuctionByItemId
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .utils import handleAuctionClosure, hasAuctionClosed, getNotificationCount
-from .utils import getNotificationList, getRecordByPk, getBidWinner
-from .models import Item, Bid, Category, SubCategory
+from .utils import getNotificationList, getRecordByPk, getBidWinner, addNewAuction
+from .models import Auction, Item, Bid, Category, SubCategory
 import logging
 
 
 
 # @login_required
 def index(req):
-    context = {'pageOptions':{'page':'index', 'buttonLabel':'Bid', 'header':'Items On Auction'}}
+    context = {'pageOptions':{'page':'index', 'buttonLabel':'View', 'header':'Active Auctions'}}
     try:
-        filteredItems = Item.objects.filter(status='opened')
+        filteredAuction = Auction.objects.filter(status='opened')
     except:
-        logging.error('Index: items not found')
+        logging.error('Index: Auctions not found')
         return render(req, 'auctions/index.html', context=context)
     else:
-        context['items'] = filteredItems
+        context['auctions'] = filteredAuction
         return render(req, 'auctions/index.html', context=context)
     
+
+
+@login_required
+def auctionIndex(req, id):
+    context = {'pageOptions':{'page':'auctionIndex', 'buttonLabel':'Bid', 'header':'Items On Auction'}}
+    try:
+        filteredItems = Item.objects.filter(auctionid=id, status='opened')
+    except:
+        logging.error('Index: items not found')
+        return render(req, 'auctions/auction.html', context=context)
+    else:
+        context['items'] = filteredItems
+        return render(req, 'auctions/auction.html', context=context)
+    
+
+
+@login_required
+def addAuction(req):
+    if req.method == 'GET':
+        return render(req, 'auctions/addAuction.html')
+    
+    return addNewAuction(req)
+
 
 
 @login_required

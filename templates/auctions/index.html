@@ -5,27 +5,26 @@
 {% block content %}
 <section class="section__container product__container" id="product">
     {% include "auctions/message.html" %}
-    {% if items and pageOptions %}
+    {% if auctions and pageOptions %}
     <h4 class="section__header">{{pageOptions.header}}</h4>
     <div class="product__grid">
-        {% for item in items %}
+        {% for auction in auctions %}
         <div class="product__card">
-            <h4>{{item.name}}</h4>
-            <!-- <p>item.minimumbid</p> -->
-            <p>Started: {{item.createdat}}</p>
-            <p>Lot No.: <strong>{{item.id}}</strong></p>
-            <div class="product-status">Status: <strong>{{item.status}}</strong></div>
             <div class="btn-div">
-                <a class="bid-btn" href="{% url 'auctions:bidItem' item.id %}?page={{pageOptions.page}}">
+                <a class="bid-btn" href="{% url 'auctions:auctionIndex' auction.id %}?page={{pageOptions.page}}">
                     {{pageOptions.buttonLabel}}
                 </a>
             </div>
-            <img src="{{item.image}}" alt="{{item.name}}" />
+            <h3>{{auction.name}}</h3>
+            <p>Started: {{auction.createdat}}</p>
+            <p>Max Participants: <strong>{{auction.maxparticipant}}</strong></p>
+            <div class="product-status">Status: <strong>{{auction.status}}</strong></div>
+            <p>Description: {{auction.description}}</p>
         </div>
         {% endfor %}
         {% else %}
     </div>
-    <div class="auction-notice">No item available</div>
+    <div class="auction-notice">No Active Auction available</div>
     {% endif %}
 </section>
 {% endblock %}

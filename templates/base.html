@@ -23,8 +23,9 @@
       </div>
       <ul class="nav__links" id="nav-links">
         <li><a href="{% url 'auctions:index' %}">Home</a></li>
-        <li><a href="{% url 'auctions:addItem' %}">Add Item</a></li>
-        <li><a href="{% url 'auctions:getSoldItems' %}">Sold Items</a></li>
+        <li><a href="{% url 'auctions:addAuction' %}">Add Auction</a></li>
+        <!-- <li><a href="{% url 'auctions:addItem' %}">Add Item</a></li>
+        <li><a href="{% url 'auctions:getSoldItems' %}">Sold Items</a></li> -->
       </ul>
       <div class="nav__notification" id="nav-notification">
         {% if user.is_authenticated %}
