@@ -4,16 +4,16 @@ from .models import Item, Auction, Notification, Category, SubCategory
 
 
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "description", "createdat"]
-    list_filter = ["createdat"]
+    list_display = ["id", "auctionid", "name", "description", "createdat"]
+    list_filter = ["auctionid"]
     search_fields = ["name"]
 admin.site.register(Item, ItemAdmin)
 
 
 class AuctionAdmin(admin.ModelAdmin):
-    list_display = ["id", "itemid", "status", "startat", "endat"]
-    list_filter = ["itemid"]
-    search_fields = ["itemid"]
+    list_display = ["id", "description", "status", "maxparticipant", "createdat"]
+    list_filter = ["id"]
+    search_fields = ["id"]
 admin.site.register(Auction, AuctionAdmin)
 
 
