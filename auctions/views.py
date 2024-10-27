@@ -7,7 +7,7 @@ from .utils import addNewItem, getAllRecords, getAuctionByItemId
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .utils import handleAuctionClosure, hasAuctionClosed, getNotificationCount
 from .utils import getNotificationList, getRecordByPk, getBidWinner, addNewAuction
-from .utils import addNewParticipant
+from .utils import addNewParticipant, participantStatus, doEditparticipant
 from .models import Auction, Item, Bid, Category, SubCategory, Participant
 from django.contrib.auth.models import User
 import logging
@@ -58,7 +58,7 @@ def addParticipant(req, id):
         return addNewParticipant(req, id)
 
     auction = getRecordByPk(Auction, id)
-    context = {'auction':auction}
+    context = {'auction':auction, 'participantStatus':participantStatus}
     return render(req, 'auctions/addParticipant.html', context=context)
     
 
@@ -66,7 +66,6 @@ def addParticipant(req, id):
 @login_required
 def listParticipants(req, id):
     auction = getRecordByPk(Auction, id)
-    # pageOptions = {'pageOptions':{'auction':auction}}
     auctionContext = {'auction': auction}
     try:
         participants = Participant.objects.filter(auctionid=id)
@@ -78,12 +77,26 @@ def listParticipants(req, id):
         return render(req, 'auctions/listParticipant.html', context=context)
 
 
+
 @login_required
-def addItem(req):
+def editParticipant(req, aid, pid):
+    participant = getRecordByPk(Participant, pid)
+    auction = getRecordByPk(Auction, aid)
+
     if req.method == 'GET':
-        return render(req, 'auctions/addItem.html')
+        context = {'auction': auction, 'participant':participant, 'participantStatus':participantStatus}
+        return render(req, 'auctions/editParticipant.html', context=context)
+
+    return doEditparticipant(req, pid)
+
+
+@login_required
+def addItem(req, id):
+    auction = getRecordByPk(Auction, id)
+    if req.method == 'GET':
+        return render(req, 'auctions/addItem.html', context={'auction':auction})
     
-    return addNewItem(req)
+    return addNewItem(req, id)
 
 
 @login_required
@@ -172,7 +185,7 @@ def getSelectHtml(req):
     tableName = req.GET.get('target').lower()
     categoryId = req.GET.get('categoryid')
     modelOptions = {
-        'category':{'model':Category, 'label':'name'}, 
+        'category':{'model':Category, 'label':'name', 'filterKwargs':''}, 
         'subcategory':{'model':SubCategory, 'filterKwargs':{'categoryid':categoryId}, 'label':'name'}, 
         'user':{'model':User, 'filterKwargs':{'is_active':1}, 'label':'username'}
     } 

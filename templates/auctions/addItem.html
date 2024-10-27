@@ -1,8 +1,7 @@
-{% extends "base.html" %}
-{% load static %}
 
+{% extends "auctions/auctionBase.html" %}
 
-{% block content %}
+{% block auction_content %}
 
 <div
   hx-get="{% url 'auctions:getSelect' %}?target=category"
@@ -13,7 +12,7 @@
 <div class="addContact container_main">
   <div class="registration form">
     <header>Add Item</header>
-    <form action="{% url 'auctions:addItem' %}" method="post" enctype="multipart/form-data">
+    <form action="{% url 'auctions:addItem' auction.id %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="form-flex">
         <input type="text" required name="name" placeholder="Item Name">

@@ -33,6 +33,7 @@ def addNewAuction(req):
 
 def addNewParticipant(req, id):
     userid = req.POST.get('username')
+    status = req.POST.get('status')
     username = getRecordByPk(User, userid)
 
     if not username:
@@ -49,12 +50,27 @@ def addNewParticipant(req, id):
 
     newParticipant = Participant(
         auctionid = id,
+        userid = userid,
         username = username,
-        status = 'active'
+        status = status
     )
     newParticipant.save()
     logging.info(f'Participant "{newParticipant.id}" created successfully')
     return HttpResponse(f"New participant '{username}' added successfully")
+
+
+def doEditparticipant(req, participantId):
+    status = req.POST.get('status')
+    try:
+        participant = Participant.objects.get(pk=participantId)
+    except:
+        logging.error('doEditparticipant: Participant not found')
+        redirect('auctions:editParticipant', id=participantId)
+    else:
+        participant.status = status
+        participant.save()
+        return redirect('auctions:listParticipant', id=participant.auctionid)
+
 
 
 
@@ -425,3 +441,13 @@ def getNotificationHtmlTbl(notificationList, title, type):
     notificationHtml += '</table>'
     notificationHtml += '</div>'
     return notificationHtml
+
+
+
+
+
+
+participantStatus = [
+    'active',
+    'remove'
+]

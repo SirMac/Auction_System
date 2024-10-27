@@ -4,23 +4,21 @@
 
 {% block auction_content %}
 
-<div
-  hx-get="{% url 'auctions:getSelect' %}?target=user"
-  hx-trigger="load"
-  hx-target="#participant"
-></div>
-
 <div class="addContact container_main">
   <div class="registration form">
-    <header>Add Participant</header>
-    <form hx-post="{% url 'auctions:addParticipant' auction.id %}" hx-target=".participant-msg" enctype="multipart/form-data">
+    <header>Edit Participant</header>
+    <form action="{% url 'auctions:editParticipant' auction.id participant.id %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="auction-flex">
-        <select name="username" id="participant"></select>
+        <input name="username" disabled id="participant" value="{{ participant.username }}"></input>
         {% if participantStatus %}
         <select name="status" id="status">
           {% for status in participantStatus %}
-            <option value="{{status}}">{{status}}</option>
+            {% if participant.status == status %}
+              <option value="{{status}}" selected>{{status}}</option>
+            {% else %}
+              <option value="{{status}}">{{status}}</option>
+            {% endif %}
           {% endfor %}
         </select>
         {% endif %}

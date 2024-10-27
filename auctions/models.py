@@ -35,6 +35,7 @@ class Item(models.Model):
 
 class Participant(models.Model):
     auctionid = models.CharField(max_length=200)
+    userid = models.CharField(max_length=200)
     username = models.CharField(max_length=200)
     status = models.CharField(max_length=200)
     createdat = models.DateTimeField(default=timezone.now)

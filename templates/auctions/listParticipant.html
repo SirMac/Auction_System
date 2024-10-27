@@ -15,16 +15,15 @@
     <main class="participant__profiles">
       {% if participants %}
         {% for participant in participants %}
-          <article class="participant__profile">
-            <!-- <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mark Zuckerberg" class="participant__picture"> -->
+          <article id="{{participant.id}}" class="participant__profile">
             <span class="participant__name">{{participant.username}}</span>
             <span class="participant__value">{{participant.status}}</span>
-            <span><span class="participant__edit">edit</span></span>
-            <span><span class="participant__delete">delete</span></span>
+            <span><a class="participant__edit" href="{% url 'auctions:editParticipant' auction.id participant.id %}">edit</a></span>
+            <span><a class="participant__delete">delete</a></span>
           </article>
         {% endfor %}
       {% else %}
-        <div class="auction-notice">No participant found</div>
+        <div class="auction-notice">No active participant found</div>
       {% endif %}
     </main>
   </div>
