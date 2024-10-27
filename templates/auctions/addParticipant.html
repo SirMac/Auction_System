@@ -13,7 +13,7 @@
 <div class="addContact container_main">
   <div class="registration form">
     <header>Add Participant</header>
-    <form hx-post="{% url 'auctions:addParticipant' pageOptions.auctionid %}" hx-target=".participant-msg" enctype="multipart/form-data">
+    <form hx-post="{% url 'auctions:addParticipant' auction.id %}" hx-target=".participant-msg" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="auction-flex">
         <select name="username" id="participant"></select>

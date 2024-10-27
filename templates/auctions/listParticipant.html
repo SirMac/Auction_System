@@ -1,0 +1,33 @@
+{% extends "auctions/auctionBase.html" %}
+
+
+
+{% block auction_content %}
+<div class="participant__main">
+  <div class="participant">
+    <header>
+      <h1 class="participant__title">
+        <span class="participant__title--top">{{auction.name}}</span>
+        <span class="participant__title--bottom">participants</span>
+      </h1>
+    </header>
+
+    <main class="participant__profiles">
+      {% if participants %}
+        {% for participant in participants %}
+          <article class="participant__profile">
+            <!-- <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mark Zuckerberg" class="participant__picture"> -->
+            <span class="participant__name">{{participant.username}}</span>
+            <span class="participant__value">{{participant.status}}</span>
+            <span><span class="participant__edit">edit</span></span>
+            <span><span class="participant__delete">delete</span></span>
+          </article>
+        {% endfor %}
+      {% else %}
+        <div class="auction-notice">No participant found</div>
+      {% endif %}
+    </main>
+  </div>
+</div>
+
+{% endblock %}

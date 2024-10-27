@@ -6,10 +6,14 @@
 <section class="section__container product__container" id="product">
     <nav>
         <ul class="nav__links" id="nav-links">
-            <li><a href="{% url 'auctions:addParticipant' pageOptions.auctionid %}">Add Participant</a></li>
-            <li><a href="{% url 'auctions:addAuction' %}">List participant</a></li>
+            {% if auction %}
+            <li><a href="{% url 'auctions:addParticipant' auction.id %}">Add Participant</a></li>
+            <li><a href="{% url 'auctions:listParticipant' auction.id %}">List participant</a></li>
             <li><a href="{% url 'auctions:addAuction' %}">Add Item</a></li>
-          </ul>
+            <li><a href="{% url 'auctions:auctionIndex' auction.id %}">List Item</a></li>
+            <!-- <li class="auction__name"><a href="{% url 'auctions:auctionIndex' auction.id %}">{{auction.name}}</a></li> -->
+            {% endif %}
+        </ul>
     </nav>
     {% block auction_content %}{% endblock %}
 </section>

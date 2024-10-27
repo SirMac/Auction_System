@@ -23,9 +23,9 @@
             <img src="{{item.image}}" alt="{{item.name}}" />
         </div>
         {% endfor %}
-        {% else %}
     </div>
-    <div class="auction-notice">No item available</div>
+    {% else %}
+        <div class="auction-notice">No item available</div>
     {% endif %}
 </div>
 {% endblock %}

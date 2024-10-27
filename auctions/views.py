@@ -8,7 +8,7 @@ from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidd
 from .utils import handleAuctionClosure, hasAuctionClosed, getNotificationCount
 from .utils import getNotificationList, getRecordByPk, getBidWinner, addNewAuction
 from .utils import addNewParticipant
-from .models import Auction, Item, Bid, Category, SubCategory
+from .models import Auction, Item, Bid, Category, SubCategory, Participant
 from django.contrib.auth.models import User
 import logging
 
@@ -38,7 +38,8 @@ def addAuction(req):
 
 @login_required
 def auctionIndex(req, id):
-    context = {'pageOptions':{'auctionid':id, 'page':'auctionIndex', 'buttonLabel':'Bid', 'header':'Items On Auction'}}
+    auction = getRecordByPk(Auction, id)
+    context = {'auction':auction, 'pageOptions':{'page':'auctionIndex', 'buttonLabel':'Bid', 'header':'Items On Auction'}}
     try:
         filteredItems = Item.objects.filter(auctionid=id, status='opened')
     except:
@@ -52,12 +53,29 @@ def auctionIndex(req, id):
 
 @login_required
 def addParticipant(req, id):
-    context = {'pageOptions':{'auctionid':id}}
-    if req.method == 'GET':
-        return render(req, 'auctions/addParticipant.html', context=context)
-    
-    return addNewParticipant(req, id)
 
+    if req.method == 'POST':
+        return addNewParticipant(req, id)
+
+    auction = getRecordByPk(Auction, id)
+    context = {'auction':auction}
+    return render(req, 'auctions/addParticipant.html', context=context)
+    
+
+
+@login_required
+def listParticipants(req, id):
+    auction = getRecordByPk(Auction, id)
+    # pageOptions = {'pageOptions':{'auction':auction}}
+    auctionContext = {'auction': auction}
+    try:
+        participants = Participant.objects.filter(auctionid=id)
+    except Exception as e:
+        logging.error(f'listParticipants: {e}')
+        return render(req, 'auctions/listParticipant.html', context=auctionContext)
+    else:
+        context = {'participants': participants, **auctionContext}
+        return render(req, 'auctions/listParticipant.html', context=context)
 
 
 @login_required
