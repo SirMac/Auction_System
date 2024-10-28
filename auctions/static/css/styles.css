@@ -1157,6 +1157,11 @@ nav {
   }
 }
 
+
+.participant .participant__profile a {
+  cursor: pointer;
+}
+
 .participant .participant__picture {
   max-width: 100%;
   width: 60px;

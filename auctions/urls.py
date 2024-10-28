@@ -10,6 +10,7 @@ urlpatterns = [
     path('auction/<int:id>/participant/add', views.addParticipant, name='addParticipant'),
     path('auction/<int:id>/participant/edit', views.listParticipants, name='listParticipant'),
     path('auction/<int:aid>/participant/<int:pid>/edit', views.editParticipant, name='editParticipant'),
+    path('auction/<int:aid>/participant/<int:pid>/delete', views.deleteParticipant, name='deleteParticipant'),
     path('auction/<int:id>/item', views.addItem, name='addItem'),
     path('lot/<int:id>/', views.bidItem, name='bidItem'),
     path('lot/time/<int:id>/', views.getBidClosingTime, name='getBidClosingTime'),

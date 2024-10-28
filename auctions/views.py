@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import error
 from django.http import HttpResponse
@@ -68,7 +68,7 @@ def listParticipants(req, id):
     auction = getRecordByPk(Auction, id)
     auctionContext = {'auction': auction}
     try:
-        participants = Participant.objects.filter(auctionid=id)
+        participants = Participant.objects.filter(auctionid=id, status__in=participantStatus)
     except Exception as e:
         logging.error(f'listParticipants: {e}')
         return render(req, 'auctions/listParticipant.html', context=auctionContext)
@@ -83,11 +83,29 @@ def editParticipant(req, aid, pid):
     participant = getRecordByPk(Participant, pid)
     auction = getRecordByPk(Auction, aid)
 
+    if not auction or not participant:
+        return index(req)
+
     if req.method == 'GET':
         context = {'auction': auction, 'participant':participant, 'participantStatus':participantStatus}
         return render(req, 'auctions/editParticipant.html', context=context)
 
-    return doEditparticipant(req, pid)
+    return doEditparticipant(req, aid, pid)
+
+
+
+@login_required
+def deleteParticipant(req, aid, pid):
+    try:
+        participant = Participant.objects.get(pk=pid)
+    except:
+        logging.error('doEditparticipant: Participant not found')
+        return redirect('auctions:editParticipant', aid=aid ,pid=pid)
+    else:
+        participant.status = 'deleted'
+        participant.save()
+        return redirect('auctions:listParticipant', id=aid)
+
 
 
 @login_required

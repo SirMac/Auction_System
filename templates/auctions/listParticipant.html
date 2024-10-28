@@ -19,7 +19,7 @@
             <span class="participant__name">{{participant.username}}</span>
             <span class="participant__value">{{participant.status}}</span>
             <span><a class="participant__edit" href="{% url 'auctions:editParticipant' auction.id participant.id %}">edit</a></span>
-            <span><a class="participant__delete">delete</a></span>
+            <span><a class="participant__delete" url="{% url 'auctions:deleteParticipant' auction.id participant.id %}">delete</a></span>
           </article>
         {% endfor %}
       {% else %}

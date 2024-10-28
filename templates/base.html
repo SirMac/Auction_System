@@ -117,6 +117,13 @@
       },
 
       {
+        title: 'Delete Partitcipant',
+        url: "",
+        trigger: document.getElementsByClassName('participant__delete'),
+        content: `You are about to delete the participant`
+      },
+
+      {
         title: 'Notifications',
         trigger: document.getElementsByClassName('notification-icon'),
         hideFooter: true
@@ -131,19 +138,13 @@
         for (let element of item.trigger) {
           element.onclick = function (ele) {
             let paramId = ele.target.getAttribute('paramId') || ''
+            let url = ele.target.getAttribute('url') || ''
+            url && (item.url = url)
             item.title && (modalTitle.innerHTML = item.title)
             item.content && (modalContent.innerHTML = item.content)
-            item.url && confirmButton.setAttribute('href', `${item.url}${paramId}/`)
+            item.url && confirmButton.setAttribute('href', `${item.url}${paramId}`)
             item.hideFooter ? (modalFooter.style.display = 'none') : (modalFooter.style.display = '')
             modalTemplate.style.display = 'block';
-            // setTimeout(() => {
-            //   // let mainContainer = document.getElementById('main-container')
-            //   document.addEventListener('click', function () {
-            //     console.log('document clicked')
-            //     modalTemplate.style.display = 'none';
-            //     document.removeEventListener('click', () => console.log('event removed'))
-            //   })
-            // }, 1000)
           }
         }
       }

@@ -59,17 +59,17 @@ def addNewParticipant(req, id):
     return HttpResponse(f"New participant '{username}' added successfully")
 
 
-def doEditparticipant(req, participantId):
+def doEditparticipant(req, aid, pid):
     status = req.POST.get('status')
     try:
-        participant = Participant.objects.get(pk=participantId)
+        participant = Participant.objects.get(pk=pid)
     except:
         logging.error('doEditparticipant: Participant not found')
-        redirect('auctions:editParticipant', id=participantId)
+        return redirect('auctions:editParticipant', aid=aid ,pid=pid)
     else:
         participant.status = status
         participant.save()
-        return redirect('auctions:listParticipant', id=participant.auctionid)
+        return redirect('auctions:listParticipant', id=aid)
 
 
 
@@ -449,5 +449,5 @@ def getNotificationHtmlTbl(notificationList, title, type):
 
 participantStatus = [
     'active',
-    'remove'
+    'observer'
 ]
