@@ -7,7 +7,8 @@ from .utils import addNewItem, getAllRecords, getAuctionByItemId
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .utils import handleAuctionClosure, hasAuctionClosed, getNotificationCount
 from .utils import getNotificationList, getRecordByPk, getBidWinner, addNewAuction
-from .utils import addNewParticipant, participantStatus, doEditparticipant
+from .utils import addNewParticipant, participantStatus, doEditAuction
+from .utils import doEditparticipant, auctionStatus
 from .models import Auction, Item, Bid, Category, SubCategory, Participant
 from django.contrib.auth.models import User
 import logging
@@ -16,7 +17,15 @@ import logging
 
 # @login_required
 def index(req):
-    context = {'pageOptions':{'page':'index', 'buttonLabel':'View', 'header':'Active Auctions'}}
+    editBtnLabel = {'editBtnLabel':'Edit'}
+    context = {
+        'pageOptions':{
+            'page':'index', 
+            'buttonLabel':'View', 
+            'header':'Active Auctions',
+            **editBtnLabel
+        }
+    }
     try:
         filteredAuction = Auction.objects.filter(status='opened')
     except:
@@ -35,11 +44,29 @@ def addAuction(req):
     return addNewAuction(req)
 
 
+@login_required
+def editAuction(req, id):
+
+    if req.method == 'POST':
+        return doEditAuction(req, id)
+
+    auction = getRecordByPk(Auction, id)
+    context = {'auction':auction, 'auctionStatus':auctionStatus}
+    return render(req, 'auctions/editAuction.html', context=context)
+
 
 @login_required
 def auctionIndex(req, id):
     auction = getRecordByPk(Auction, id)
-    context = {'auction':auction, 'pageOptions':{'page':'auctionIndex', 'buttonLabel':'Bid', 'header':'Items On Auction'}}
+    context = {
+        'auction':auction, 
+        'pageOptions':{
+            'page':'auctionIndex', 
+            'viewBtnLabel':'Bid', 
+            'header':'Items On Auction',
+            'buttonLabel': 'Bid'
+        }
+    }
     try:
         filteredItems = Item.objects.filter(auctionid=id, status='opened')
     except:

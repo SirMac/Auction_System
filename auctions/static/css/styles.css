@@ -319,6 +319,24 @@ nav {
   text-align: end;
 }
 
+
+.auctionbase__header {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.auctionbase__header p {
+  flex-basis: 40%;
+}
+
+
+.auction__btn {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 10px;
+}
+
+
 .product__card .bid-btn {
   font-size: 1.2rem;
   font-weight: 500;

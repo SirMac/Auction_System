@@ -4,9 +4,16 @@
 
 {% block content %}
 <section class="section__container product__container" id="product">
+    <div class="auctionbase__header">
+        <p>Auction Name: {{auction.name}}</p>
+        <p>Maximum Participant: {{auction.maxparticipant}}</p>
+        <p>Status: {{auction.status}}</p>
+        <p>Description: {{auction.description}}</p>
+    </div>
     <nav>
         <ul class="nav__links" id="nav-links">
             {% if auction %}
+            <li><a href="{% url 'auctions:editAuction' auction.id %}">Edit Auction</a></li>
             <li><a href="{% url 'auctions:addParticipant' auction.id %}">Add Participant</a></li>
             <li><a href="{% url 'auctions:listParticipant' auction.id %}">List participant</a></li>
             <li><a href="{% url 'auctions:addItem' auction.id %}">Add Item</a></li>

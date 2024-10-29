@@ -6,6 +6,7 @@ app_name = 'auctions'
 urlpatterns = [
     path('', views.index, name='index'),
     path('auction', views.addAuction, name='addAuction'),
+    path('auction/<int:id>/edit', views.editAuction, name='editAuction'),
     path('auction/<int:id>/', views.auctionIndex, name='auctionIndex'),
     path('auction/<int:id>/participant/add', views.addParticipant, name='addParticipant'),
     path('auction/<int:id>/participant/edit', views.listParticipants, name='listParticipant'),

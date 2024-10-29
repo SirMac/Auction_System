@@ -31,6 +31,33 @@ def addNewAuction(req):
 
 
 
+def doEditAuction(req, id):
+    name = req.POST.get('name')
+    description = req.POST.get('description')
+    maxparticipant = req.POST.get('maxparticipant')
+    status = req.POST.get('status')
+
+    if not name or not description or not maxparticipant:
+        logging.error('doEditAuction: Empty fields not allowed')
+        error(request=req, message='Empty fields not allowed')
+        return redirect('auctions:editAuction', id=id)
+
+    try:
+        auction = Auction.objects.get(pk=id)
+    except:
+        logging.error('doEditAuction: auction not found')
+        return redirect('auctions:editAuction', id=id)
+    else:
+        auction.name = name
+        auction.description = description
+        auction.maxparticipant = maxparticipant
+        auction.status = status
+        auction.save()
+        return redirect('auctions:auctionIndex', id=id)
+
+
+
+
 def addNewParticipant(req, id):
     userid = req.POST.get('username')
     status = req.POST.get('status')
@@ -450,4 +477,10 @@ def getNotificationHtmlTbl(notificationList, title, type):
 participantStatus = [
     'active',
     'observer'
+]
+
+
+auctionStatus = [
+    'opened',
+    'closed'
 ]

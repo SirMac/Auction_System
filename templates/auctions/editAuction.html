@@ -1,0 +1,36 @@
+{% extends "auctions/auctionBase.html" %}
+
+
+{% block auction_content %}
+
+<div class="addContact container_main">
+  <div class="registration form">
+    <header>Edit Auction</header>
+    <form action="{% url 'auctions:editAuction' auction.id %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="auction-flex">
+        <input type="text" required name="name" value="{{auction.name}}">
+        <input type="number" required name="maxparticipant" value="{{auction.maxparticipant}}">
+        <input type="text" required name="description" value="{{auction.description}}">
+        {% if auctionStatus %}
+        <select name="status" id="status">
+          {% for status in auctionStatus %}
+            {% if auction.status == status %}
+              <option value="{{status}}" selected>{{status}}</option>
+            {% else %}
+              <option value="{{status}}">{{status}}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        {% endif %}
+      </div>
+
+      {% include "auctions/message.html" %}
+
+      <button type="submit" class="button">Submit</button>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}
