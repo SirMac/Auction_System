@@ -322,12 +322,15 @@ nav {
 
 .auctionbase__header {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  text-align: center;
+  /* justify-items: center; */
+  /* flex-wrap: wrap; */
 }
 
-.auctionbase__header p {
+/* .auctionbase__header p {
   flex-basis: 40%;
-}
+} */
 
 
 .auction__btn {
@@ -1078,6 +1081,10 @@ nav {
 
 
 /* Auction_Base */
+.auction__nav__links {
+  width: 100% !important;
+}
+
 .auction__name {
   background-color: rgba(0, 0, 0, 0.1);
   border: 2px solid #04AA6D;

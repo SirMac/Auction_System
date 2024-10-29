@@ -8,10 +8,10 @@
         <p>Auction Name: {{auction.name}}</p>
         <p>Maximum Participant: {{auction.maxparticipant}}</p>
         <p>Status: {{auction.status}}</p>
-        <p>Description: {{auction.description}}</p>
+        <!-- <p>Description: {{auction.description}}</p> -->
     </div>
     <nav>
-        <ul class="nav__links" id="nav-links">
+        <ul class="nav__links auction__nav__links" id="nav-links">
             {% if auction %}
             <li><a href="{% url 'auctions:editAuction' auction.id %}">Edit Auction</a></li>
             <li><a href="{% url 'auctions:addParticipant' auction.id %}">Add Participant</a></li>
