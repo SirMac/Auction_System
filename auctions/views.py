@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.messages import error
 from django.http import HttpResponse
 from time import strftime
-from .utils import addNewItem, getAllRecords, getAuctionByItemId
+from .utils import addNewItem, getAllRecords, getAuctionByItemId, hasBiddingClosed
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .utils import handleAuctionClosure, hasAuctionClosed, getNotificationCount
 from .utils import getNotificationList, getRecordByPk, getBidWinner, addNewAuction
@@ -145,28 +145,38 @@ def addItem(req, id):
 
 
 @login_required
-def bidItem(req, id):
+def bidItem(req, aid, itemid):
     if req.method == 'GET':
       page = req.GET.get('page')
       triggers = {'index':'every 1s', 'soldItems':'load'}
-      trigger = triggers[page]
 
-      if not trigger:
-          trigger = 'every 1s'
+      try:
+        trigger = triggers[page]
+      except Exception as e:
+        logging.error(e)
+        trigger = 'every 1s'
+
 
       bids = None
-      auction = getAuctionByItemId(id)
+      auction = getRecordByPk(Auction, aid) 
 
       try:
           bids = Bid.objects.filter(auctionid=auction.id)
       except:
           logging.error(f'Item does not exist')
           
-      item = getRecordByPk(Item, id)
-      context = {'item': item, 'bids':bids, 'pageOptions':{'trigger':triggers[page]}}
+      item = getRecordByPk(Item, itemid)
+
+      context = {
+          'auction': auction,
+          'item': item, 
+          'bids':bids, 
+          'pageOptions':{'trigger':trigger}
+        }
+      
       return render(req, 'auctions/bidItem.html', context=context)
 
-    return addNewBid(req, id)
+    return addNewBid(req, aid, itemid)
 
 
 
@@ -175,8 +185,8 @@ def getBidClosingTime(req, id):
     
     handleAuctionClosure(id)
 
-    if hasAuctionClosed(id):
-        return HttpResponse('auction closed')
+    if hasBiddingClosed(id):
+        return HttpResponse('Bidding closed')
     
     resetTimeForItemNotBidded(id)
 

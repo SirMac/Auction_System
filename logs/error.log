@@ -1,2 +1,4 @@
-[contactor] WARNING 2024-10-29 13:21:08,804 Not Found: /favicon.ico
-[contactor] WARNING 2024-10-29 13:21:08,805 "GET /favicon.ico HTTP/1.1" 404 179
+[contactor] ERROR 2024-10-30 13:16:45,356 'auctionIndex'
+[contactor] ERROR 2024-10-30 13:16:45,356 'auctionIndex'
+[contactor] ERROR 2024-10-30 13:17:02,300 'auctionIndex'
+[contactor] ERROR 2024-10-30 13:17:02,300 'auctionIndex'

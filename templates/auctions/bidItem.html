@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "auctions/auctionBase.html" %}
 
 
 
-{% block content %}
+{% block auction_content %}
 <div class="biditem-container">
   <section class="section__container product__container" id="product">
     {% include "auctions/message.html" %}
@@ -26,7 +26,7 @@
         <div class="bid-list" hx-get="{% url 'auctions:getLiveBid' item.id %}" hx-trigger="{{pageOptions.trigger}}"
         hx-target=".bid-list"></div>
         {% if item.status != 'closed' %}
-        <form class="bid-detail" hx-post="{% url 'auctions:bidItem' item.id %}" hx-target="#bid-response">
+        <form class="bid-detail" hx-post="{% url 'auctions:bidItem' auction.id item.id %}" hx-target="#bid-response">
           {% csrf_token %}
           <input class="input" name="amount" type="number">
           <input class="hidden" name="username" value="{{item.username}}">

@@ -19,7 +19,7 @@
 .section__container {
   max-width: var(--max-width);
   margin: auto;
-  padding: 3rem 1rem;
+  padding: 1.5rem 1rem;
 }
 
 .section__header {
@@ -321,11 +321,19 @@ nav {
 
 
 .auctionbase__header {
-  display: flex;
-  flex-direction: column;
   text-align: center;
-  /* justify-items: center; */
-  /* flex-wrap: wrap; */
+}
+
+
+.auctionbase__header span {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.5);
+  padding: 0 20px;
+  border-radius: 5px;
+}
+
+.auctionbase__header strong {
+  color: black;
 }
 
 /* .auctionbase__header p {
@@ -808,7 +816,7 @@ nav {
 }
 
 .container_main .form {
-  padding: 2rem;
+  padding: 0.5rem;
 }
 
 .container_main .form header {
@@ -1102,10 +1110,9 @@ nav {
 
 .participant {
   max-width: 790px;
-  /* width: 100%; */
   margin: 0 auto;
   border-radius: 12px;
-  box-shadow: 0 0 40px -10px rgba(0, 0, 0, .4);
+  /* box-shadow: 0 0 40px -10px rgba(0, 0, 0, .4); */
 }
 
 .participant header {

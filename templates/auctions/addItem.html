@@ -1,4 +1,3 @@
-
 {% extends "auctions/auctionBase.html" %}
 
 {% block auction_content %}
@@ -20,7 +19,6 @@
         <select name="categoryid" id="category"
           hx-get="{% url 'auctions:getSelect' %}?target=subcategory"
           hx-target="#subcategory"
-          hx-indicator=".htmx-indicator"
         ></select>
         <select name="subcategoryid" id="subcategory"></select>
         <input type="text" required name="minimumbid" placeholder="Starting Price">

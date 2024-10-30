@@ -118,12 +118,13 @@ def addNewItem(req, id):
             error(request=req, message=message)
         return redirect('auctions:addItem')
 
-    # endate = getBidEndDateFromNow(timezone)
+    endate = getBidEndDateFromNow(timezone)
 
     fs = FileSystemStorage()
     itemName = fs.save(itemImage.name, itemImage)
 
     newItem = Item(
+        auctionid = id,
         name = name, 
         description = description, 
         categoryid = categoryid, 
@@ -131,21 +132,21 @@ def addNewItem(req, id):
         minimumbid = minimumbid, 
         username = req.user.username,
         image = fs.url(itemName),
-        status = 'opened'
+        status = 'opened',
+        endat = endate
     )
     newItem.save()
-    success(request=req, message=f'Item "{name}" successfully added for auction')
-    # addAuction(newItem.id)
+    success(request=req, message=f'Item "{name}" successfully added for auction "{id}"')
     return redirect('auctions:auctionIndex', id=id)
 
 
 
-def addNewBid(req, id):
+def addNewBid(req, aid, itemid):
     amount = req.POST.get('amount')
     username = req.user.username
-    auction = getAuctionByItemId(id)
+    auction = getRecordByPk(Auction, aid)
 
-    if hasAuctionClosed(id):
+    if hasAuctionClosed(aid):
         return HttpResponse('Auction has closed')
     
     validBid = ValidateBid(req.POST)
@@ -158,14 +159,14 @@ def addNewBid(req, id):
 
     newBid = Bid(
         auctionid = auction.id, 
-        itemid = id, 
+        itemid = itemid, 
         username = username, 
         amount = amount
     )
     newBid.save()
     auction.auction1 = amount
     auction.save()
-    logging.info(f'Bid for Item "{id}" with amount {amount} submitted for {username}')
+    logging.info(f'Bid for Item "{itemid}" with amount {amount} submitted for {username}')
 
     return HttpResponse('')
 
@@ -204,15 +205,20 @@ def getRecordByPk(model, id):
 
 
 def getAuctionByItemId(id, field=''):
-    try:
-        auction = Auction.objects.get(itemid=id)
-    except (KeyError, Auction.DoesNotExist):
-        logging.error(f'Auction does not exist')
+    item = getRecordByPk(Item, id)
+
+    if not item:
         return None
-    else:
-        if field:
-            return getattr(auction, field)
-        return auction
+    
+    auction = getRecordByPk(Auction, item.auctionid)
+
+    if not auction:
+        return None
+    
+    if field:
+        return getattr(auction, field)
+    
+    return auction
 
 
 
@@ -237,18 +243,17 @@ def getHighestBid(auctionid):
 
 
 def getBidTimeDiffInSecTupple(id):
-    auction = ''
-    try:
-        auction = Auction.objects.get(itemid=id)
-    except (KeyError, Auction.DoesNotExist):
-        logging.error(f'Auction does not exist')
+    item = getRecordByPk(Item, id)
+    
+    if not item:
+        logging.error(f'Item does not exist')
         return 0
-    else:
-        endAt = auction.endat
-        currentTime = timezone.now()
-        timeDiff = endAt - currentTime
-        secondsTupple = gmtime(timeDiff.total_seconds())
-        return secondsTupple
+    
+    endAt = item.endat
+    currentTime = timezone.now()
+    timeDiff = endAt - currentTime
+    secondsTupple = gmtime(timeDiff.total_seconds())
+    return secondsTupple
 
 
 
@@ -276,9 +281,17 @@ def hasItemBeenBidded(id):
         return False
     
 
-def hasAuctionClosed(itemid):
+def hasAuctionClosed(auctionid):
+    auction = getRecordByPk(Auction, auctionid)
+    if auction and auction.status == 'closed':
+        return True
+    return False
+
+
+
+def hasBiddingClosed(itemid):
     item = getRecordByPk(Item, itemid)
-    if item.status == 'closed':
+    if item and item.status == 'closed':
         return True
     return False
 
@@ -292,20 +305,19 @@ def resetTimeForItemNotBidded(id):
     
     if bidTimeExpired and not itemHasBids:
         newEndDate = getBidEndDateFromNow(timezone)
-        try:
-            auction = Auction.objects.get(itemid=id)
-        except:
-            logging.error(f'resetTimeForItemNotBidded: Auction do not exit for item, {id}')
+        item = getRecordByPk(Item, id)
+        if not item:
+            logging.error(f'resetTimeForItemNotBidded: Item do not exit for, {id}')
             return
-        else:
-            auction.endat = newEndDate
-            auction.save()
+        
+        item.endat = newEndDate
+        item.save()
 
 
 
 def handleAuctionClosure(itemid):
 
-    if hasAuctionClosed(itemid):
+    if hasBiddingClosed(itemid):
         return
 
     itemHasBids = hasItemBeenBidded(itemid)
