@@ -336,9 +336,10 @@ nav {
   color: black;
 }
 
-/* .auctionbase__header p {
-  flex-basis: 40%;
-} */
+.auctionbase__header h3 {
+  color: black;
+  padding-bottom: 5px;
+}
 
 
 .auction__btn {
@@ -1120,6 +1121,7 @@ nav {
   height: 50px;
   background-image: repeating-radial-gradient(circle at var(--start), transparent 0%, transparent 10%, rgba(54, 89, 219, .33) 10%, rgba(54, 89, 219, .33) 17%), linear-gradient(to right, #5b7cfa, #3659db);
   color: #fff;
+  /* background-color: rgba(0, 0, 0, 0.1); */
   position: relative;
   border-radius: 12px 12px 0 0;
   overflow: hidden;

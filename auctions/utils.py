@@ -1,11 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.messages import error, success
-from django.urls import reverse
 from .auctionValidators import ValidateAuction, ValidateBid, ValidateParticipant
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from time import strftime, gmtime
-from datetime import datetime
 from django.utils import timezone
 from .models import Item, Bid, Auction, Notification, Participant
 from django.contrib.auth.models import User
@@ -149,7 +147,10 @@ def addNewBid(req, aid, itemid):
     if hasAuctionClosed(aid):
         return HttpResponse('Auction has closed')
     
-    validBid = ValidateBid(req.POST)
+    if hasBiddingClosed(itemid):
+        return HttpResponse(f'Bidding for Item on Lot {itemid} has closed')
+
+    validBid = ValidateBid(req.POST, aid)
     messages = validBid.errorMessages
     
     if messages:
@@ -315,7 +316,7 @@ def resetTimeForItemNotBidded(id):
 
 
 
-def handleAuctionClosure(itemid):
+def handleBiddingClosure(itemid):
 
     if hasBiddingClosed(itemid):
         return
@@ -337,16 +338,14 @@ def handleAuctionClosure(itemid):
         )
         newNotification.save()
 
-        auction.status = 'closed'
         item.status = 'closed'
         item.save()
-        auction.save()
 
 
 
 
 def getBidWinner(itemid):
-    if not hasAuctionClosed(itemid):
+    if not hasBiddingClosed(itemid):
         return None
     try:
         notification = Notification.objects.get(itemid=itemid)

@@ -5,18 +5,21 @@
 {% block content %}
 <section class="section__container product__container" id="product">
     <div class="auctionbase__header">
-        <h3>{{auction.name}}</h3>
-        <span>Maximum Participant: <strong>{{auction.maxparticipant}}</strong></span>
-        <span>Status: <strong>{{auction.status}}</strong></span>
+        <a href="{% url 'auctions:auctionIndex' auction.id %}">
+            <h3>{{auction.name}}</h3>
+            <span>Maximum Participant: <strong>{{auction.maxparticipant}}</strong></span>
+            <span>Status: <strong>{{auction.status}}</strong></span>
+        </a>
     </div>
     <nav>
         <ul class="nav__links auction__nav__links" id="nav-links">
             {% if auction %}
-                <li><a href="{% url 'auctions:editAuction' auction.id %}">Edit Auction</a></li>
-                <li><a href="{% url 'auctions:addParticipant' auction.id %}">Add Participant</a></li>
-                <li><a href="{% url 'auctions:listParticipant' auction.id %}">List participant</a></li>
-                <li><a href="{% url 'auctions:addItem' auction.id %}">Add Item</a></li>
-                <li><a href="{% url 'auctions:auctionIndex' auction.id %}">List Item</a></li>
+            <li><a href="{% url 'auctions:auctionIndex' auction.id %}">Live Auction</a></li>
+            <li><a href="{% url 'auctions:editAuction' auction.id %}">Edit Auction</a></li>
+            <li><a href="{% url 'auctions:addParticipant' auction.id %}">Add Participant</a></li>
+            <li><a href="{% url 'auctions:listParticipant' auction.id %}">List participant</a></li>
+            <li><a href="{% url 'auctions:addItem' auction.id %}">Add Item</a></li>
+            <li><a href="{% url 'auctions:getSoldItems' auction.id %}">Sold Items</a></li>
             {% endif %}
         </ul>
     </nav>

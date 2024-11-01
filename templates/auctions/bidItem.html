@@ -23,12 +23,12 @@
       {% endif %}
 
       <div class="bid-info product__card" id="bid-info">
-        <div class="bid-list" hx-get="{% url 'auctions:getLiveBid' item.id %}" hx-trigger="{{pageOptions.trigger}}"
+        <div class="bid-list" hx-get="{% url 'auctions:getBidDetail' auction.id item.id %}" hx-trigger="{{pageOptions.trigger}}"
         hx-target=".bid-list"></div>
         {% if item.status != 'closed' %}
         <form class="bid-detail" hx-post="{% url 'auctions:bidItem' auction.id item.id %}" hx-target="#bid-response">
           {% csrf_token %}
-          <input class="input" name="amount" type="number">
+          <input class="input" required name="amount" type="number">
           <input class="hidden" name="username" value="{{item.username}}">
           <input class="hidden" name="minimumbid" value="{{item.minimumbid}}">
           <input class="hidden" name="id" value="{{item.id}}">

@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from time import strftime
 from .utils import addNewItem, getAllRecords, getAuctionByItemId, hasBiddingClosed
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
-from .utils import handleAuctionClosure, hasAuctionClosed, getNotificationCount
+from .utils import handleBiddingClosure, getNotificationCount
 from .utils import getNotificationList, getRecordByPk, getBidWinner, addNewAuction
 from .utils import addNewParticipant, participantStatus, doEditAuction
 from .utils import doEditparticipant, auctionStatus
@@ -38,10 +38,11 @@ def index(req):
 
 @login_required
 def addAuction(req):
-    if req.method == 'GET':
-        return render(req, 'auctions/addAuction.html')
+    if req.method == 'POST':
+        return addNewAuction(req)
     
-    return addNewAuction(req)
+    return render(req, 'auctions/addAuction.html')
+
 
 
 @login_required
@@ -80,7 +81,7 @@ def auctionIndex(req, id):
 
 @login_required
 def addParticipant(req, id):
-
+    
     if req.method == 'POST':
         return addNewParticipant(req, id)
 
@@ -113,11 +114,11 @@ def editParticipant(req, aid, pid):
     if not auction or not participant:
         return index(req)
 
-    if req.method == 'GET':
-        context = {'auction': auction, 'participant':participant, 'participantStatus':participantStatus}
-        return render(req, 'auctions/editParticipant.html', context=context)
-
-    return doEditparticipant(req, aid, pid)
+    if req.method == 'POST':
+        return doEditparticipant(req, aid, pid)
+    
+    context = {'auction': auction, 'participant':participant, 'participantStatus':participantStatus}
+    return render(req, 'auctions/editParticipant.html', context=context)
 
 
 
@@ -137,53 +138,56 @@ def deleteParticipant(req, aid, pid):
 
 @login_required
 def addItem(req, id):
-    auction = getRecordByPk(Auction, id)
-    if req.method == 'GET':
-        return render(req, 'auctions/addItem.html', context={'auction':auction})
+
+    if req.method == 'POST':
+        return addNewItem(req, id)
     
-    return addNewItem(req, id)
+    auction = getRecordByPk(Auction, id)
+    return render(req, 'auctions/addItem.html', context={'auction':auction})
+    
 
 
 @login_required
 def bidItem(req, aid, itemid):
-    if req.method == 'GET':
-      page = req.GET.get('page')
-      triggers = {'index':'every 1s', 'soldItems':'load'}
+    
+    if req.method == 'POST':
+      return addNewBid(req, aid, itemid)
+    
+    page = req.GET.get('page')
+    triggers = {'index':'every 1s', 'soldItems':'load'}
 
-      try:
+    try:
         trigger = triggers[page]
-      except Exception as e:
+    except Exception as e:
         logging.error(e)
         trigger = 'every 1s'
 
 
-      bids = None
-      auction = getRecordByPk(Auction, aid) 
+    bids = None
+    auction = getRecordByPk(Auction, aid) 
 
-      try:
-          bids = Bid.objects.filter(auctionid=auction.id)
-      except:
-          logging.error(f'Item does not exist')
-          
-      item = getRecordByPk(Item, itemid)
+    try:
+        bids = Bid.objects.filter(auctionid=auction.id)
+    except:
+        logging.error(f'Item does not exist')
+        
+    item = getRecordByPk(Item, itemid)
 
-      context = {
-          'auction': auction,
-          'item': item, 
-          'bids':bids, 
-          'pageOptions':{'trigger':trigger}
-        }
-      
-      return render(req, 'auctions/bidItem.html', context=context)
-
-    return addNewBid(req, aid, itemid)
+    context = {
+        'auction': auction,
+        'item': item, 
+        'bids':bids, 
+        'pageOptions':{'trigger':trigger}
+    }
+    
+    return render(req, 'auctions/bidItem.html', context=context)
 
 
 
 
 def getBidClosingTime(req, id):
     
-    handleAuctionClosure(id)
+    handleBiddingClosure(id)
 
     if hasBiddingClosed(id):
         return HttpResponse('Bidding closed')
@@ -215,23 +219,23 @@ def getNotification(req):
 
 
 
-def getLiveBidDetail(req, id):
-    try:
-        auction = getAuctionByItemId(id)
-        if not auction:
-            return HttpResponse('')
-        bids = Bid.objects.filter(auctionid=auction.id)
-    except:
+def getBidDetail(req, aid, itemid):
+    
+    item = getRecordByPk(Item, itemid)
+
+    if not item:
         return HttpResponse('')
-    else:
-        bidList = "<ul>"
-        for bid in bids:
-            bidList += f"<li><span class='bid-date'>{bid.createdat.strftime('%Y-%m-%d %H:%M:%S')}</span> Competing bid ({bid.username}): <span class='bid-amount'>${bid.amount}</span><li>"
-        bidList += '<ul>'
-        winner = getBidWinner(id)
-        if winner:
-            bidList += f"<div id='bid-winner'>Winner: {winner}</div>"
-        return HttpResponse(bidList)
+    
+    bids = Bid.objects.filter(itemid=item.id)
+
+    bidList = "<ul>"
+    for bid in bids:
+        bidList += f"<li><span class='bid-date'>{bid.createdat.strftime('%Y-%m-%d %H:%M:%S')}</span> Competing bid ({bid.username}): <span class='bid-amount'>${bid.amount}</span><li>"
+    bidList += '<ul>'
+    winner = getBidWinner(itemid)
+    if winner:
+        bidList += f"<div id='bid-winner'>Winner: {winner}</div>"
+    return HttpResponse(bidList)
 
 
 
@@ -286,13 +290,15 @@ def getSelectHtml(req):
 
 
 
-def getSoldItems(req):
+def getSoldItems(req, aid):
     context = {'pageOptions':{'page':'soldItems', 'buttonLabel':'View', 'header':'Sold Items'}}
+    auction = getRecordByPk(Auction, aid)
     try:
         filteredItems = Item.objects.filter(status='closed')
     except:
         logging.error('getSoldItems: items not found')
-        return render(req, 'auctions/index.html', context=context)
+        return render(req, 'auctions/auctionIndex.html', context=context)
     else:
+        context['auction'] = auction
         context['items'] = filteredItems
-        return render(req, 'auctions/index.html', context=context)
+        return render(req, 'auctions/auctionIndex.html', context=context)

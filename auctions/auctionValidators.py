@@ -35,11 +35,11 @@ class ValidateAuction:
 
     
 class ValidateBid:
-  def __init__(self, userData):
+  def __init__(self, userData, aid):
     self.errorMessages = []
     self.validateNumberFields(userData)
     self.validateMinimumBid(userData)
-    self.validateHighestBid(userData)
+    self.validateHighestBid(userData, aid)
 
   def toInt(self, str):
     try:
@@ -60,14 +60,15 @@ class ValidateBid:
     if int(userData.get('minimumbid')) > int(userData.get('amount')):
       return self.errorMessages.append(f"Bid amount cannot be less than starting price, {userData.get('minimumbid')}")
 
-  def validateHighestBid(self, userData):
-    id = userData.get('id')
-    if id:
-      auction = get_object_or_404(Auction, itemid=id)
+  def validateHighestBid(self, userData, aid):
+    try:
+      auction = Auction.objects.get(pk=aid)
+    except Exception as e:
+      logging.error(f'ValidateHighestBid: {e}')
+    else:
       if self.toInt(auction.auction1) > self.toInt(userData.get('amount')):
         return self.errorMessages.append(f'Bid amount cannot be less than the highest bid, {auction.auction1}')
-    else:
-      self.errorMessages.append(f'An error occured. Try again later.')
+  
 
 
 
