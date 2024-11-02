@@ -119,6 +119,13 @@ nav {
   color: var(--white);
 }
 
+.nav__links li {
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  padding: 4px 5px;
+  border-radius: 5px;
+  border-bottom: 1px solid slategray;
+}
+
 .nav__search {
   display: none;
 }
@@ -544,7 +551,7 @@ nav {
     padding: 0;
     width: fit-content;
     flex-direction: row;
-    gap: 3rem;
+    gap: 2rem;
     background-color: transparent;
     transform: none;
   }
@@ -659,6 +666,24 @@ nav {
 .biditem-p {
   color: brown;
   padding: 5px 0;
+}
+
+.biditem-participants, .biditem-item {
+  margin-right: 5px;
+}
+
+.biditem-participants-header {
+  color: rgba(0, 0, 0, 0.5);
+  padding-bottom: 10px;
+  font-weight: 600;
+}
+
+.biditem-container .participant__name {
+  font-style: italic;
+}
+
+.biditem-participants-list {
+  list-style-type: square;
 }
 
 

@@ -1,19 +1,30 @@
 {% extends "auctions/auctionBase.html" %}
 
-
-
 {% block auction_content %}
 <div class="biditem-container">
   <section class="section__container product__container" id="product">
-    {% include "auctions/message.html" %}
     <div class="biditem-grid">
+
+      <div class="product__card biditem-participants">
+        <div class="biditem-participants-header">Participants</div>
+        {% if participants %}
+        {% for participant in participants %}
+        <ul id="{{participant.id}}" class="biditem-participants-list">
+          <li class="participant__name">{{participant.username}}</li>
+        </ul>
+        {% endfor %}
+        {% else %}
+        <div class="auction-notice">No active participant found</div>
+        {% endif %}
+      </div>
+
       {% if item %}
-      <div class="product__card">
+      <div class="product__card biditem-item">
         <h4>{{item.name}}</h4>
         <img src="{{item.image}}" alt="{{item.name}}" />
         <div class="biditem-p" id="close-in">
-          Closes in: <span id="bid-time" hx-get="{% url 'auctions:getBidClosingTime' item.id %}" hx-trigger="{{pageOptions.trigger}}"
-            hx-target="#bid-time"></span>
+          Closes in: <span id="bid-time" hx-get="{% url 'auctions:getBidClosingTime' item.id %}"
+            hx-trigger="{{pageOptions.trigger}}" hx-target="#bid-time"></span>
         </div>
         <p>Seller: <strong>{{item.username}}</strong></p>
         <p>Starting Price: <strong>${{item.minimumbid}}</strong></p>
@@ -23,8 +34,8 @@
       {% endif %}
 
       <div class="bid-info product__card" id="bid-info">
-        <div class="bid-list" hx-get="{% url 'auctions:getBidDetail' auction.id item.id %}" hx-trigger="{{pageOptions.trigger}}"
-        hx-target=".bid-list"></div>
+        <div class="bid-list" hx-get="{% url 'auctions:getBidDetail' auction.id item.id %}"
+          hx-trigger="{{pageOptions.trigger}}" hx-target=".bid-list"></div>
         {% if item.status != 'closed' %}
         <form class="bid-detail" hx-post="{% url 'auctions:bidItem' auction.id item.id %}" hx-target="#bid-response">
           {% csrf_token %}
@@ -33,10 +44,11 @@
           <input class="hidden" name="minimumbid" value="{{item.minimumbid}}">
           <input class="hidden" name="id" value="{{item.id}}">
           <button type="submit" class="btn">Bid</button>
-          </form>
-          <div id="bid-response" class="display-nonez"></div>
+        </form>
+        <div id="bid-response" class="display-nonez"></div>
         {% endif %}
       </div>
+
     </div>
   </section>
 </div>

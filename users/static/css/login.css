@@ -99,3 +99,16 @@ body {
 .signup label:hover {
   text-decoration: underline;
 }
+
+
+
+
+.success {
+  color:#006653;
+  font-weight: bold;
+}
+
+
+ .error {
+  color: brown;
+}

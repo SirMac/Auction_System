@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.messages import error
+from django.contrib.messages import success, error
 from django.http import HttpResponse
 from time import strftime
-from .utils import addNewItem, getAllRecords, getAuctionByItemId, hasBiddingClosed
+from .utils import addNewItem, getAllRecords, hasBiddingClosed
 from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidded
 from .utils import handleBiddingClosure, getNotificationCount
 from .utils import getNotificationList, getRecordByPk, getBidWinner, addNewAuction
@@ -99,6 +99,7 @@ def listParticipants(req, id):
         participants = Participant.objects.filter(auctionid=id, status__in=participantStatus)
     except Exception as e:
         logging.error(f'listParticipants: {e}')
+        error(request=req, message='An error occured. Try again.')
         return render(req, 'auctions/listParticipant.html', context=auctionContext)
     else:
         context = {'participants': participants, **auctionContext}
@@ -167,16 +168,24 @@ def bidItem(req, aid, itemid):
     auction = getRecordByPk(Auction, aid) 
 
     try:
+        participants = Participant.objects.filter(auctionid=aid, status='active')
+    except:
+        participants = None
+
+
+    try:
         bids = Bid.objects.filter(auctionid=auction.id)
     except:
         logging.error(f'Item does not exist')
         
+
     item = getRecordByPk(Item, itemid)
 
     context = {
         'auction': auction,
         'item': item, 
         'bids':bids, 
+        'participants': participants,
         'pageOptions':{'trigger':trigger}
     }
     
@@ -294,7 +303,7 @@ def getSoldItems(req, aid):
     context = {'pageOptions':{'page':'soldItems', 'buttonLabel':'View', 'header':'Sold Items'}}
     auction = getRecordByPk(Auction, aid)
     try:
-        filteredItems = Item.objects.filter(status='closed')
+        filteredItems = Item.objects.filter(auctionid=aid, status='closed')
     except:
         logging.error('getSoldItems: items not found')
         return render(req, 'auctions/auctionIndex.html', context=context)

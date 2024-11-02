@@ -24,11 +24,7 @@
         <input type="password" required name="password1" placeholder="Create a password">
         <input type="password" required name="password2" placeholder="Confirm your password">
         <div>
-          {% if messages %}
-          {% for message in messages %}
-          <p style="text-align: center; color: brown;"><strong>{{ message }}</strong></p>
-          {% endfor %}
-          {% endif %}
+          {% include "auctions/message.html" %}
         </div>
         <button type="submit" class="button">Signup</button>
       </form>

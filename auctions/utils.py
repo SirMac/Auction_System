@@ -51,6 +51,8 @@ def doEditAuction(req, id):
         auction.maxparticipant = maxparticipant
         auction.status = status
         auction.save()
+
+        success(request=req, message='Auction updated successfully')
         return redirect('auctions:auctionIndex', id=id)
 
 
@@ -90,10 +92,12 @@ def doEditparticipant(req, aid, pid):
         participant = Participant.objects.get(pk=pid)
     except:
         logging.error('doEditparticipant: Participant not found')
+        error(request=req, message='An error occured. Try again.')
         return redirect('auctions:editParticipant', aid=aid ,pid=pid)
     else:
         participant.status = status
         participant.save()
+        success(request=req, message=f'Participant, {participant.username} updated successfully.')
         return redirect('auctions:listParticipant', id=aid)
 
 
@@ -134,7 +138,7 @@ def addNewItem(req, id):
         endat = endate
     )
     newItem.save()
-    success(request=req, message=f'Item "{name}" successfully added for auction "{id}"')
+    success(request=req, message=f'Item "{name}" successfully added to auction "{id}"')
     return redirect('auctions:auctionIndex', id=id)
 
 
