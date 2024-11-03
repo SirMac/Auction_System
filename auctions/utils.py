@@ -20,6 +20,7 @@ def addNewAuction(req):
         name = name,
         description = description, 
         maxparticipant = maxparticipant,
+        username = req.user.username,
         status = 'opened'
     )
     newAuction.save()
@@ -154,7 +155,7 @@ def addNewBid(req, aid, itemid):
     if hasBiddingClosed(itemid):
         return HttpResponse(f'Bidding for Item on Lot {itemid} has closed')
 
-    validBid = ValidateBid(req.POST, aid)
+    validBid = ValidateBid(req, aid)
     messages = validBid.errorMessages
     
     if messages:
@@ -169,8 +170,6 @@ def addNewBid(req, aid, itemid):
         amount = amount
     )
     newBid.save()
-    auction.auction1 = amount
-    auction.save()
     logging.info(f'Bid for Item "{itemid}" with amount {amount} submitted for {username}')
 
     return HttpResponse('')
@@ -235,9 +234,9 @@ def getBidEndDateFromNow(timezone):
 
 
 
-def getHighestBid(auctionid):
+def getHighestBid(itemid):
     try:
-        bid = Bid.objects.filter(auctionid=auctionid).order_by('-amount','createdat')
+        bid = Bid.objects.filter(itemid=itemid).order_by('-amount','createdat')
     except:
         return 0
     else:
@@ -329,7 +328,7 @@ def handleBiddingClosure(itemid):
     bidTimeExpired = hasBidTimeExpired(itemid)
     item = getRecordByPk(Item, itemid)
     auction = getAuctionByItemId(itemid)
-    highestBid = getHighestBid(auction.id)
+    highestBid = getHighestBid(itemid)
     
     if bidTimeExpired and itemHasBids and highestBid:
         newNotification = Notification(

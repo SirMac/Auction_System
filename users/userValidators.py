@@ -64,8 +64,6 @@ class ValidateUserDeregistration:
             if len(item) <= 0:
                 return
             item = item[0]
-            if item.status == 'close':
-                return
             message = f"Deregistration failed. You have an active item, '{item.name}' on auction"
             logging.error(message)
             self.errorMessages.append(message)
@@ -74,19 +72,19 @@ class ValidateUserDeregistration:
 
     def validateActiveBid(self):
         try:
-            auctions = Auction.objects.filter(status='opened')
+            items = Item.objects.filter(status='opened')
         except KeyError as e:
             logging.error(str(e))
         else:
-            if len(auctions) <= 0:
-                logging.error('validateActiveBid: Auction not found')
+            if len(items) <= 0:
+                logging.error('validateActiveBid: No opened Item found')
                 return
             
             message = ''
-            for auction in auctions:
-                highestBid = getHighestBid(auction.id)
+            for item in items:
+                highestBid = getHighestBid(item.id)
                 if highestBid and highestBid.username == self.username:
-                    message = f"Deregistration failed. You are the highest bidder for an ongoing auction on lot '{auction.itemid}' "
+                    message = f"Deregistration failed. You are the highest bidder for an ongoing item on lot '{item.id}' "
            
             if message:
                 logging.error(message)

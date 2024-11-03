@@ -9,6 +9,7 @@ class Auction(models.Model):
     status = models.CharField(max_length=200, default='opened')
     auction1 = models.CharField(max_length=200, default='0')
     maxparticipant = models.CharField(max_length=200, default='0')
+    username = models.CharField(max_length=200, default='-')
     createdat = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

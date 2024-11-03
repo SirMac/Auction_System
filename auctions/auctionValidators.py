@@ -34,11 +34,18 @@ class ValidateAuction:
 
     
 class ValidateBid:
-  def __init__(self, userData, aid):
+  def __init__(self, req, aid):
     self.errorMessages = []
-    self.validateNumberFields(userData)
-    self.validateMinimumBid(userData)
-    self.validateHighestBid(userData, aid)
+    self.bidData = req.POST
+    self.amount = req.POST.get('amount')
+    self.minimumbid = req.POST.get('minimumbid')
+    self.highestBidAmt = req.POST.get('highestBidAmt')
+    self.username = req.user.username
+    self.validateNumberFields()
+    self.validateMinimumBid()
+    self.validateHighestBid(aid)
+    self.validateParticipant(aid)
+    self.validateAuctionStatus(aid)
 
   def toInt(self, str):
     try:
@@ -48,26 +55,34 @@ class ValidateBid:
     else:
         return num
 
-  def validateNumberFields(self, userData):
+  def validateNumberFields(self):
     numberFields = ['amount']
     for numberField in numberFields:
-      if not userData[numberField].isnumeric():
+      if not self.bidData[numberField].isnumeric():
         logging.error(f'The field "{numberField}" must be numeic')
         return self.errorMessages.append(f'The field "{numberField}" must be numeic')
 
-  def validateMinimumBid(self, userData):
-    if int(userData.get('minimumbid')) > int(userData.get('amount')):
-      return self.errorMessages.append(f"Bid amount cannot be less than starting price, {userData.get('minimumbid')}")
+  def validateMinimumBid(self):
+    if int(self.minimumbid) > int(self.amount):
+      return self.errorMessages.append(f"Bid amount cannot be less than starting price, {self.minimumbid}")
 
-  def validateHighestBid(self, userData, aid):
-    try:
-      auction = Auction.objects.get(pk=aid)
-    except Exception as e:
-      logging.error(f'ValidateHighestBid: {e}')
-    else:
-      if self.toInt(auction.auction1) > self.toInt(userData.get('amount')):
-        return self.errorMessages.append(f'Bid amount cannot be less than the highest bid, {auction.auction1}')
+  def validateHighestBid(self, aid):
+    if self.toInt(self.highestBidAmt) > self.toInt(self.amount):
+      return self.errorMessages.append(f'Bid amount cannot be less than the highest bid, {self.highestBidAmt}')
   
+  def validateParticipant(self, aid):
+    try:
+      Participant.objects.get(auctionid=aid, username=self.username, status='active')
+    except Exception as e:
+      logging.error(f'validateParticipant: {e}')
+      return self.errorMessages.append(f'Cannot bid. You are not a participant')
+
+  def validateAuctionStatus(self, aid):
+    try:
+      Auction.objects.get(pk=aid, status='opened')
+    except Exception as e:
+      logging.error(f'validateAuctionStatus: {e}')
+      return self.errorMessages.append(f'Cannot bid. Auction has closed')
 
 
 

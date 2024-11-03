@@ -8,7 +8,7 @@ from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidd
 from .utils import handleBiddingClosure, getNotificationCount
 from .utils import getNotificationList, getRecordByPk, getBidWinner, addNewAuction
 from .utils import addNewParticipant, participantStatus, doEditAuction
-from .utils import doEditparticipant, auctionStatus
+from .utils import doEditparticipant, auctionStatus, getHighestBid
 from .models import Auction, Item, Bid, Category, SubCategory, Participant
 from django.contrib.auth.models import User
 import logging
@@ -102,7 +102,10 @@ def listParticipants(req, id):
         error(request=req, message='An error occured. Try again.')
         return render(req, 'auctions/listParticipant.html', context=auctionContext)
     else:
-        context = {'participants': participants, **auctionContext}
+        canEdit = False
+        if req.user.username.lower() == auction.username.lower():
+            canEdit = True
+        context = {'participants': participants, **auctionContext, 'canEdit':canEdit}
         return render(req, 'auctions/listParticipant.html', context=context)
 
 
@@ -180,12 +183,18 @@ def bidItem(req, aid, itemid):
         
 
     item = getRecordByPk(Item, itemid)
+    highestBid = getHighestBid(itemid)
+    highestBidAmt = 0
+    
+    if highestBid:
+        highestBidAmt = highestBid.amount
 
     context = {
         'auction': auction,
         'item': item, 
         'bids':bids, 
         'participants': participants,
+        'highestBidAmt': highestBidAmt,
         'pageOptions':{'trigger':trigger}
     }
     
