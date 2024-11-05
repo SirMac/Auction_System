@@ -17,13 +17,12 @@ import logging
 
 # @login_required
 def index(req):
-    editBtnLabel = {'editBtnLabel':'Edit'}
     context = {
         'pageOptions':{
             'page':'index', 
             'buttonLabel':'View', 
             'header':'Active Auctions',
-            **editBtnLabel
+            'index': 'active-menu'
         }
     }
     try:
@@ -41,7 +40,12 @@ def addAuction(req):
     if req.method == 'POST':
         return addNewAuction(req)
     
-    return render(req, 'auctions/addAuction.html')
+    context = {
+        'pageOptions':{
+            'addAuction': 'active-menu'
+        }
+    }
+    return render(req, 'auctions/addAuction.html', context=context)
 
 
 

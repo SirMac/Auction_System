@@ -14,12 +14,32 @@
     <nav>
         <ul class="nav__links auction__nav__links" id="nav-links">
             {% if auction %}
-            <li><a href="{% url 'auctions:auctionIndex' auction.id %}">Live Auction</a></li>
-            <li><a href="{% url 'auctions:editAuction' auction.id %}">Edit Auction</a></li>
-            <li><a href="{% url 'auctions:addParticipant' auction.id %}">Add Participant</a></li>
-            <li><a href="{% url 'auctions:listParticipant' auction.id %}">List participant</a></li>
-            <li><a href="{% url 'auctions:addItem' auction.id %}">Add Item</a></li>
-            <li><a href="{% url 'auctions:getSoldItems' auction.id %}">Sold Items</a></li>
+                {% with current_url=request.get_full_path %}
+                    {% url 'auctions:auctionIndex' auction.id as url %}
+                    <li class="{% if current_url == url %} active-menu {%endif%}">
+                        <a href="{{ url }}">Live Auction</a>
+                    </li>
+                    {% url 'auctions:editAuction' auction.id as url %}
+                    <li class="{% if current_url == url %} active-menu {%endif%}">
+                        <a href="{{ url }}">Edit Auction</a>
+                    </li>
+                    {% url 'auctions:addParticipant' auction.id as url %}
+                    <li class="{% if current_url == url %} active-menu {%endif%}">
+                        <a href="{{ url }}">Add Participant</a>
+                    </li>
+                    {% url 'auctions:listParticipant' auction.id as url %}
+                    <li class="{% if current_url == url %} active-menu {%endif%}">
+                        <a href="{{ url }}">List participant</a>
+                    </li>
+                    {% url 'auctions:addItem' auction.id as url%}
+                    <li class="{% if current_url == url %} active-menu {%endif%}">
+                        <a href="{{ url }}">Add Item</a>
+                    </li>
+                    {% url 'auctions:getSoldItems' auction.id as url %}
+                    <li class="{% if current_url == url %} active-menu {%endif%}">
+                        <a href="{{ url }}">Sold Items</a>
+                    </li>
+                {% endwith %}
             {% endif %}
         </ul>
     </nav>
