@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 from django.contrib.messages import error, success
-from .auctionValidators import ValidateAuction, ValidateBid, ValidateParticipant
+from .auctionValidators import ValidateAddAuction, ValidateBid, ValidateParticipant
+from .auctionValidators import ValidateEditAuction, ValidateAddItem
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from time import strftime, gmtime
@@ -16,6 +17,17 @@ def addNewAuction(req):
     name = req.POST.get('name')
     description = req.POST.get('description')
     maxparticipant = req.POST.get('maxparticipant')
+
+    validAuction = ValidateAddAuction(req.POST)
+    messages = validAuction.errorMessages
+    
+    if messages:
+        for message in messages:
+            logging.error(message)
+            error(request=req, message=message)
+        return redirect('auctions:addAuction')
+
+
     newAuction = Auction(
         name = name,
         description = description, 
@@ -36,9 +48,12 @@ def doEditAuction(req, id):
     maxparticipant = req.POST.get('maxparticipant')
     status = req.POST.get('status')
 
-    if not name or not description or not maxparticipant:
-        logging.error('doEditAuction: Empty fields not allowed')
-        error(request=req, message='Empty fields not allowed')
+    auctionValidation = ValidateEditAuction(req, id)
+    messages = auctionValidation.errorMessages
+    if messages:
+        for message in messages:
+            logging.error(message)
+        error(request=req, message=message)
         return redirect('auctions:editAuction', id=id)
 
     try:
@@ -68,13 +83,13 @@ def addNewParticipant(req, id):
         logging.error('addNewParticipant: Username not found')
         return HttpResponse('Username not found')
     
-    validParticipant = ValidateParticipant(username)
+    validParticipant = ValidateParticipant(req, id)
     messages = validParticipant.errorMessages
     
     if messages:
         for message in messages:
             logging.error(message)
-        return HttpResponse(message)
+        return HttpResponse(f'<div class="error">{message}</div>')
 
     newParticipant = Participant(
         auctionid = id,
@@ -112,14 +127,14 @@ def addNewItem(req, id):
     minimumbid = req.POST.get('minimumbid')
     itemImage = req.FILES['image']
     
-    validItem = ValidateAuction(req.POST)
+    validItem = ValidateAddItem(req.POST, id)
     messages = validItem.errorMessages
     
     if messages:
         for message in messages:
             logging.error(message)
             error(request=req, message=message)
-        return redirect('auctions:addItem')
+        return redirect('auctions:addItem', id=id)
 
     endate = getBidEndDateFromNow(timezone)
 

@@ -120,10 +120,11 @@ nav {
 }
 
 .nav__links li {
-  /* background-color: rgba(0, 0, 0, 0.1); */
-  padding: 4px 5px;
-  border-radius: 5px;
-  border-bottom: 1px solid slategray;
+  padding: 2px 5px;
+}
+
+.active-menu {
+  border-bottom: 2px solid darkgreen;
 }
 
 .nav__search {
@@ -446,62 +447,6 @@ nav {
 .footer .footer-span {
   color: rgba(255, 255, 255, 0.3);
 }
-
-/* 
-.footer__container {
-  display: grid;
-  gap: 4rem 2rem;
-}
-
-.footer__logo {
-  margin-bottom: 1rem;
-}
-
-.footer__logo .logo {
-  color: var(--white);
-}
-
-.footer__col p {
-  margin-bottom: 2rem;
-  color: var(--extra-light);
-  opacity: 0.8;
-}
-
-.footer__socials {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.footer__socials a {
-  font-size: 1.5rem;
-  color: var(--white);
-}
-
-.footer__socials a:hover {
-  opacity: 0.5;
-}
-
-.footer__col h4 {
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-  font-weight: 400;
-  color: var(--white);
-}
-
-.footer__links {
-  display: grid;
-  gap: 1rem;
-}
-
-.footer__links a {
-  color: var(--extra-light);
-  opacity: 0.8;
-}
-
-.footer__links a:hover {
-  opacity: 1;
-} */
 
 
 @media (width > 540px) {
@@ -925,19 +870,19 @@ nav {
   
 }
 
- ::-webkit-input-placeholder { /* WebKit browsers */
+ ::-webkit-input-placeholder { 
   text-transform: none;
 }
- :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+ :-moz-placeholder { 
   text-transform: none;
 }
- ::-moz-placeholder { /* Mozilla Firefox 19+ */
+ ::-moz-placeholder { 
   text-transform: none;
 }
- :-ms-input-placeholder { /* Internet Explorer 10+ */
+ :-ms-input-placeholder { 
   text-transform: none;
 }
- ::placeholder { /* Recent browsers */
+ ::placeholder { 
   text-transform: none;
 }
 
@@ -1189,14 +1134,7 @@ nav {
   left: var(--start);
   transform: translate(-50%, -50%);
 }
-/* 
-.participant .profile {
-  background-color: #fff;
-  border-radius: 0 0 12px 12px;
-  padding: 15px 15px 20px;
-  display: grid;
-  row-gap: 8px;
-} */
+
 
 .participant .participant__profile {
   display: grid;
@@ -1206,7 +1144,6 @@ nav {
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 0 5px 7px -1px rgba(51, 51, 51, 0.23);
-  /* cursor: pointer; */
   transition: transform .25s cubic-bezier(.7,.98,.86,.98), box-shadow .25s cubic-bezier(.7,.98,.86,.98);
   background-color: #fff;
   
@@ -1229,7 +1166,6 @@ nav {
 }
 
 .participant .participant__name {
-  /* color: #404144; */
   font-weight: 600;
   font-size: 16px;
   letter-spacing: 0.64px;
@@ -1264,8 +1200,3 @@ nav {
   border-radius: 5px;
 }
 
-
-
-.active-menu {
-  border: 2px solid darkgreen;
-}
