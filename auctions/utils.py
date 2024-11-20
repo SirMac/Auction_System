@@ -24,7 +24,7 @@ def addNewAuction(req):
     if messages:
         for message in messages:
             logging.error(message)
-            error(request=req, message=message)
+        error(request=req, message=message)
         return redirect('auctions:addAuction')
 
 
@@ -133,7 +133,7 @@ def addNewItem(req, id):
     if messages:
         for message in messages:
             logging.error(message)
-            error(request=req, message=message)
+        error(request=req, message=message)
         return redirect('auctions:addItem', id=id)
 
     endate = getBidEndDateFromNow(timezone)

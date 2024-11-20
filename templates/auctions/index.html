@@ -5,8 +5,9 @@
 {% block content %}
 <section class="section__container product__container" id="product">
     {% include "auctions/message.html" %}
-    {% if auctions and pageOptions %}
+    {% if pageOptions %}
     <h4 class="section__header">{{pageOptions.header}}</h4>
+    {% if auctions %}
     <div class="product__grid">
         {% for auction in auctions %}
         <div class="product__card">
@@ -24,9 +25,10 @@
             <p>Description: {{auction.description}}</p>
         </div>
         {% endfor %}
-        {% else %}
     </div>
-    <div class="auction-notice">No Active Auction available</div>
+    {% else %}
+    <div class="auction-notice">No {{pageOptions.header}} available</div>
+    {% endif %}
     {% endif %}
 </section>
 {% endblock %}

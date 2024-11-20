@@ -310,8 +310,6 @@ def getSelectHtml(req):
 
 
 
-
-
 def getSoldItems(req, aid):
     context = {'pageOptions':{'page':'soldItems', 'buttonLabel':'View', 'header':'Sold Items'}}
     auction = getRecordByPk(Auction, aid)
@@ -324,3 +322,26 @@ def getSoldItems(req, aid):
         context['auction'] = auction
         context['items'] = filteredItems
         return render(req, 'auctions/auctionIndex.html', context=context)
+    
+
+
+def getClosedAuction(req):
+    context = {
+        'pageOptions':{
+            'page':'index', 
+            'buttonLabel':'View', 
+            'header':'Closed Auctions',
+            'index': 'active-menu'
+        }
+    }
+    try:
+        filteredAuction = Auction.objects.filter(status='closed')
+    except:
+        logging.error('getClosedAuction: Auctions not found')
+        return render(req, 'auctions/index.html', context=context)
+    else:
+        context['auctions'] = filteredAuction
+        return render(req, 'auctions/index.html', context=context)
+
+
+
