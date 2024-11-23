@@ -131,6 +131,7 @@ class ValidateAddParticipant(ValidateAuctionBase):
     super().__init__()
     userId = req.POST.get('username')
     self.validateDuplicateUsername(userId)
+    self.validateNumberOfParticipants(id)
     self.validateEditByOwner(req, id)
     self.validateAuctionStatus(id)
 
@@ -145,5 +146,21 @@ class ValidateAddParticipant(ValidateAuctionBase):
     else:
       if participant:
         message = f'Selected participant already added'
+        logging.error(message)
+        return self.errorMessages.append(message)
+
+  def validateNumberOfParticipants(self, auctionid):
+    try:
+      auction = Auction.objects.get(pk=auctionid)
+      participants = Participant.objects.filter(auctionid=auctionid)
+    except:
+      message = f'validateNumberOfParticipants: Participants for auction "{auctionid}" does not exist'
+      logging.error(message)
+    else:
+      if not auction and len(participants) <= 0:
+        return 
+      
+      if int(auction.maxparticipant) <= len(participants):
+        message = f'Cannot add participants more than allowed'
         logging.error(message)
         return self.errorMessages.append(message)
