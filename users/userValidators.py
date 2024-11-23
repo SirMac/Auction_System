@@ -1,9 +1,8 @@
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from auctions.models import Item, Auction
+from auctions.models import Item
 from auctions.utils import getHighestBid
 import logging
-# from django.contrib.auth.models import User
 
 
 class ValidateUser:

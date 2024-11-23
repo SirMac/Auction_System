@@ -30,7 +30,7 @@ class ValidateAuctionBase:
   
   def validateTextFields(self, userData, textFields):
     for textField in textFields:
-      if not userData[textField].isalpha():
+      if not userData[textField].replace(' ', '').isalpha():
         logging.error(f'The field "{textField}" must be letters only')
         self.errorMessages.append(f'The field "{textField}" must be letters only')
 
@@ -39,11 +39,12 @@ class ValidateAuctionBase:
     for numberField in numberFields:
       if not userData[numberField].isnumeric():
         logging.error(f'The field "{numberField}" must be numeic')
-        self.errorMessages.append(f'The field "{numberField}" must be numeic')
+        self.errorMessages.append(f'The field "{numberField}" must be numeric')
 
-  def validateParticipant(self, aid):
+  def validateParticipant(self, req, aid):
+    username = req.user.username
     try:
-      Participant.objects.get(auctionid=aid, username=self.username, status='active')
+      Participant.objects.get(auctionid=aid, username=username, status='active')
     except Exception as e:
       logging.error(f'validateParticipant: {e}')
       return self.errorMessages.append(f'Access denied. You are not a participant')
@@ -62,8 +63,8 @@ class ValidateAddAuction(ValidateAuctionBase):
   def __init__(self, userData):
     super().__init__()
     self.validateEmptyFields(userData)
-    textFields = ['name','description']
-    self.validateTextFields(userData, textFields)
+    # textFields = ['description']
+    # self.validateTextFields(userData, textFields)
     numberFields = ['maxparticipant']
     self.validateNumberFields(userData, numberFields)
 
@@ -78,32 +79,33 @@ class ValidateEditAuction(ValidateAuctionBase):
 
 class ValidateAddItem(ValidateAuctionBase):
     
-  def __init__(self, userData, auctionId):
+  def __init__(self, req, auctionId):
     super().__init__()
+    userData = req.POST
     self.validateEmptyFields(userData)
-    textFields = ['name','description']
-    self.validateTextFields(userData, textFields)
+    # textFields = ['name']
+    # self.validateTextFields(userData, textFields)
     numberFields = ['minimumbid']
     self.validateNumberFields(userData, numberFields)
-    self.validateParticipant(auctionId)
+    self.validateParticipant(req, auctionId)
     self.validateAuctionStatus(auctionId)
 
 
 
     
 class ValidateBid(ValidateAuctionBase):
-  def __init__(self, req, aid):
+  def __init__(self, req, aid, highestBid):
     super().__init__()
     self.bidData = req.POST
     self.amount = req.POST.get('amount')
     self.minimumbid = req.POST.get('minimumbid')
-    self.highestBidAmt = req.POST.get('highestBidAmt')
+    self.highestBidAmt = highestBid
     self.username = req.user.username
     numberFields = ['amount']
     self.validateNumberFields(req.POST, numberFields)
     self.validateMinimumBid()
     self.validateHighestBid(aid)
-    self.validateParticipant(aid)
+    self.validateParticipant(req, aid)
     self.validateAuctionStatus(aid)
 
   def toInt(self, str):
@@ -124,7 +126,7 @@ class ValidateBid(ValidateAuctionBase):
   
 
 
-class ValidateParticipant(ValidateAuctionBase):
+class ValidateAddParticipant(ValidateAuctionBase):
   def __init__(self, req, id):
     super().__init__()
     userId = req.POST.get('username')

@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from django.contrib.messages import error, success
-from .auctionValidators import ValidateAddAuction, ValidateBid, ValidateParticipant
+from .auctionValidators import ValidateAddAuction, ValidateBid, ValidateAddParticipant
 from .auctionValidators import ValidateEditAuction, ValidateAddItem
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
@@ -83,7 +83,7 @@ def addNewParticipant(req, id):
         logging.error('addNewParticipant: Username not found')
         return HttpResponse('Username not found')
     
-    validParticipant = ValidateParticipant(req, id)
+    validParticipant = ValidateAddParticipant(req, id)
     messages = validParticipant.errorMessages
     
     if messages:
@@ -127,7 +127,7 @@ def addNewItem(req, id):
     minimumbid = req.POST.get('minimumbid')
     itemImage = req.FILES['image']
     
-    validItem = ValidateAddItem(req.POST, id)
+    validItem = ValidateAddItem(req, id)
     messages = validItem.errorMessages
     
     if messages:
@@ -170,7 +170,8 @@ def addNewBid(req, aid, itemid):
     if hasBiddingClosed(itemid):
         return HttpResponse(f'Bidding for Item on Lot {itemid} has closed')
 
-    validBid = ValidateBid(req, aid)
+    highestBidAmt = getHighestBidAmt(itemid)
+    validBid = ValidateBid(req, aid, highestBidAmt)
     messages = validBid.errorMessages
     
     if messages:
@@ -253,12 +254,19 @@ def getHighestBid(itemid):
     try:
         bid = Bid.objects.filter(itemid=itemid).order_by('-amount','createdat')
     except:
-        return 0
+        return None
     else:
         if len(bid) <= 0:
-            return 0
+            return None
         return bid[0]
 
+
+def getHighestBidAmt(itemid):
+    highestBid = getHighestBid(itemid)
+    highestBidAmt = 0
+    if highestBid:
+        highestBidAmt = highestBid.amount
+    return highestBidAmt
 
 
 def getBidTimeDiffInSecTupple(id):

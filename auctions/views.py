@@ -8,7 +8,7 @@ from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidd
 from .utils import handleBiddingClosure, getNotificationCount
 from .utils import getNotificationList, getRecordByPk, getBidWinner, addNewAuction
 from .utils import addNewParticipant, participantStatus, doEditAuction
-from .utils import doEditparticipant, auctionStatus, getHighestBid
+from .utils import doEditparticipant, auctionStatus
 from .models import Auction, Item, Bid, Category, SubCategory, Participant
 from django.contrib.auth.models import User
 import logging
@@ -187,18 +187,12 @@ def bidItem(req, aid, itemid):
         
 
     item = getRecordByPk(Item, itemid)
-    highestBid = getHighestBid(itemid)
-    highestBidAmt = 0
-    
-    if highestBid:
-        highestBidAmt = highestBid.amount
 
     context = {
         'auction': auction,
         'item': item, 
         'bids':bids, 
         'participants': participants,
-        'highestBidAmt': highestBidAmt,
         'pageOptions':{'trigger':trigger}
     }
     
