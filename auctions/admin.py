@@ -1,6 +1,15 @@
 from django.contrib import admin
 from .models import Item, Auction, Notification, Category, SubCategory
+from .models import Bid, Participant
 
+
+
+
+class AuctionAdmin(admin.ModelAdmin):
+    list_display = ["id", "description", "status", "maxparticipant", "createdat"]
+    list_filter = ["id"]
+    search_fields = ["id"]
+admin.site.register(Auction, AuctionAdmin)
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -10,12 +19,18 @@ class ItemAdmin(admin.ModelAdmin):
 admin.site.register(Item, ItemAdmin)
 
 
-class AuctionAdmin(admin.ModelAdmin):
-    list_display = ["id", "description", "status", "maxparticipant", "createdat"]
+class ParticipantAdmin(admin.ModelAdmin):
+    list_display = ["id", "auctionid", "userid", "username", "status", "createdat"]
     list_filter = ["id"]
     search_fields = ["id"]
-admin.site.register(Auction, AuctionAdmin)
+admin.site.register(Participant, ParticipantAdmin)
 
+
+class BidAdmin(admin.ModelAdmin):
+    list_display = ["id", "auctionid", "itemid", "username", "amount", "createdat"]
+    list_filter = ["id"]
+    search_fields = ["id"]
+admin.site.register(Bid, BidAdmin)
 
 
 class NotificationAdmin(admin.ModelAdmin):
