@@ -139,7 +139,7 @@ class ValidateAddParticipant(ValidateAuctionBase):
 
   def validateDuplicateUsername(self, userId):
     try:
-      participant = Participant.objects.get(userid=userId)
+      participant = Participant.objects.get(userid=userId, status='active')
     except:
       message = f'ValidateParticipant: Username with id "{userId}" does not exist'
       logging.error(message)
@@ -152,7 +152,7 @@ class ValidateAddParticipant(ValidateAuctionBase):
   def validateNumberOfParticipants(self, auctionid):
     try:
       auction = Auction.objects.get(pk=auctionid)
-      participants = Participant.objects.filter(auctionid=auctionid)
+      participants = Participant.objects.filter(auctionid=auctionid, status='active')
     except:
       message = f'validateNumberOfParticipants: Participants for auction "{auctionid}" does not exist'
       logging.error(message)
