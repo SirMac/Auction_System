@@ -264,12 +264,12 @@ def getSelectHtml(req):
         'subcategory':{'model':SubCategory, 'filterKwargs':{'categoryid':categoryId}, 'label':'name'}, 
         'user':{'model':User, 'filterKwargs':{'is_active':1}, 'label':'username'}
     } 
-    select = "<option value=''>---</option>"
 
     if not tableName:
         logging.error('getSelectHtml: request query string empty')
         return HttpResponse(select)
     
+    select = f"<option value=''>Select {tableName}</option>"
     modelOption = modelOptions[tableName]
 
     if not modelOption:

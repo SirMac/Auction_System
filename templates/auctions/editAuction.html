@@ -8,20 +8,24 @@
     <header>Edit Auction</header>
     <form action="{% url 'auctions:editAuction' auction.id %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="auction-flex">
-        <input type="text" required name="name" value="{{auction.name}}">
-        <input type="number" required name="maxparticipant" value="{{auction.maxparticipant}}">
-        <input type="text" required name="description" value="{{auction.description}}">
+      <div class="edit-auction-flex">
+          <label for="name" class="auction-flex-item">Auction name</label>
+          <input class="auction-flex-item_" type="text" required name="name" value="{{auction.name}}">
+          <label class="auction-flex-item" for="maxparticipant">Max Participants</label>
+          <input class="auction-flex-item_" type="number" required name="maxparticipant" value="{{auction.maxparticipant}}">
+          <label class="auction-flex-item" for="description">Description</label>
+          <input class="auction-flex-item_" type="text" required name="description" value="{{auction.description}}">
         {% if auctionStatus %}
-        <select name="status" id="status">
-          {% for status in auctionStatus %}
-            {% if auction.status == status %}
-              <option value="{{status}}" selected>{{status}}</option>
-            {% else %}
-              <option value="{{status}}">{{status}}</option>
-            {% endif %}
-          {% endfor %}
-        </select>
+          <label class="auction-flex-item" for="status">Status</label>
+          <select class="auction-flex-item_" name="status" id="status">
+            {% for status in auctionStatus %}
+              {% if auction.status == status %}
+                <option value="{{status}}" selected>{{status}}</option>
+              {% else %}
+                <option value="{{status}}">{{status}}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
         {% endif %}
       </div>
       <button type="submit" class="button">Submit</button>

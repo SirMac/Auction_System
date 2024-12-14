@@ -9,9 +9,11 @@
     <header>Edit Participant</header>
     <form action="{% url 'auctions:editParticipant' auction.id participant.id %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="auction-flex">
+      <div class="edit-auction-flex">
+        <label for="username" class="auction-flex-item">Username</label>
         <input name="username" disabled id="participant" value="{{ participant.username }}"></input>
         {% if participantStatus %}
+        <label for="status" class="auction-flex-item">Status</label>
         <select name="status" id="status">
           {% for status in participantStatus %}
             {% if participant.status == status %}

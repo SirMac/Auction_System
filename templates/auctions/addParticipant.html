@@ -15,9 +15,11 @@
     <header>Add Participant</header>
     <form hx-post="{% url 'auctions:addParticipant' auction.id %}" hx-target=".participant-msg" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="auction-flex">
+      <div class="edit-auction-flex">
+        <label for="username" class="auction-flex-item">Username</label>
         <select name="username" id="participant" required></select>
         {% if participantStatus %}
+        <label for="status" class="auction-flex-item">Status</label>
         <select name="status" id="status">
           {% for status in participantStatus %}
             <option value="{{status}}">{{status}}</option>

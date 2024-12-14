@@ -2,11 +2,7 @@
 
 {% block auction_content %}
 
-<div
-  hx-get="{% url 'auctions:getSelect' %}?target=category"
-  hx-trigger="load"
-  hx-target="#category"
-></div>
+<div hx-get="{% url 'auctions:getSelect' %}?target=category" hx-trigger="load" hx-target="#category"></div>
 
 <div class="addContact container_main">
   <div class="registration form">
@@ -16,11 +12,12 @@
       <div class="form-flex">
         <input type="text" required name="name" placeholder="Item Name">
         <input type="text" required name="description" placeholder="Description">
-        <select name="categoryid" id="category"
-          hx-get="{% url 'auctions:getSelect' %}?target=subcategory"
-          hx-target="#subcategory"
-        ></select>
-        <select name="subcategoryid" id="subcategory"></select>
+        <select name="categoryid" id="category" hx-get="{% url 'auctions:getSelect' %}?target=subcategory"
+          hx-target="#subcategory">
+        </select>
+        <select name="subcategoryid" id="subcategory">
+          <option value="">Sub-Category</option>
+        </select>
         <input type="number" required name="minimumbid" placeholder="Starting Price">
         <input type="file" required name="image" placeholder="Upload Image">
       </div>
