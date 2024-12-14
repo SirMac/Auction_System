@@ -159,6 +159,33 @@ def addNewItem(req, id):
 
 
 
+
+def doEditItem(req, aid, itemid):
+    name = req.POST.get('name')
+    description = req.POST.get('description')
+    minimumbid = req.POST.get('minimumbid')
+    try:
+        item = Item.objects.get(pk=itemid)
+    except:
+        logging.error('doEditItem: Item not found')
+        error(request=req, message='Item not found.')
+        return redirect('auctions:auctionIndex', id=aid)
+    else:
+        if item.status.lower() == 'closed':
+            error(request=req, message=f'Bidding on Item "{item.name}" on Lot "{item.id}" closed.')
+            return redirect('auctions:auctionIndex', id=aid)    
+        
+        item.name = name
+        item.description = description
+        item.minimumbid = minimumbid
+        item.save()
+        success(request=req, message=f'Item, {item.name} updated successfully.')
+        return redirect('auctions:auctionIndex', id=aid)
+
+
+
+
+
 def addNewBid(req, aid, itemid):
     amount = req.POST.get('amount')
     username = req.user.username

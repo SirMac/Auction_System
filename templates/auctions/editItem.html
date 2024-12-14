@@ -5,24 +5,22 @@
 <div class="addContact container_main">
   <div class="registration form">
     <header>Edit Item</header>
-    <form action="{% url 'auctions:editItem' auction.id %}" method="post" enctype="multipart/form-data">
+    {% if canEdit %}
+    <form action="{% url 'auctions:editItem' auction.id item.id %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="edit-auction-flex">
         <label for="name" class="auction-flex-item">Name</label>
         <input type="text" required name="name" value="{{item.name}}">
         <label for="description" class="auction-flex-item">Description</label>
         <input type="text" required name="description" value="{{item.description}}">
-        <label for="category" class="auction-flex-item">Category</label>
-        <input name="categoryid" id="category" disabled value="item.category">
-        <label for="subcategory" class="auction-flex-item">Subcategory</label>
-        <input name="subcategoryid" id="subcategory" disabled value="{{item.subcategory}}">
         <label for="minimumbid" class="auction-flex-item">Starting Price</label>
         <input type="number" required name="minimumbid" value="{{item.minimumbid}}">
-        <label for="file" class="auction-flex-item">Item Image</label>
-        <input type="file" required name="image" value="{{item.image}}">
       </div>
       <button type="submit" class="button">Submit</button>
     </form>
+    {% else %}
+    <div class="auction-notice">You don't have the permission to edit this item</div>
+    {% endif %}
   </div>
 </div>
 

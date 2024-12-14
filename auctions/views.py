@@ -8,7 +8,7 @@ from .utils import addNewBid, getBidTimeDiffInSecTupple, resetTimeForItemNotBidd
 from .utils import handleBiddingClosure, getNotificationCount
 from .utils import getNotificationList, getRecordByPk, getBidWinner, addNewAuction
 from .utils import addNewParticipant, participantStatus, doEditAuction
-from .utils import doEditparticipant, auctionStatus
+from .utils import doEditparticipant, auctionStatus, doEditItem
 from .models import Auction, Item, Bid, Category, SubCategory, Participant
 from django.contrib.auth.models import User
 import logging
@@ -152,6 +152,28 @@ def addItem(req, id):
     
     auction = getRecordByPk(Auction, id)
     return render(req, 'auctions/addItem.html', context={'auction':auction})
+    
+
+
+@login_required
+def editItem(req, aid, itemid):
+
+    if req.method == 'POST':
+        return doEditItem(req, aid, itemid)
+    
+    auction = getRecordByPk(Auction, aid)
+    item = getRecordByPk(Item, itemid)
+    username = req.user.username
+    canEdit = False
+    if item and (username.lower() == item.username.lower()):
+        canEdit = True
+
+    context = {
+        'auction':auction,
+        'item': item,
+        'canEdit': canEdit
+    }
+    return render(req, 'auctions/editItem.html', context=context)
     
 
 

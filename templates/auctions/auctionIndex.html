@@ -14,10 +14,19 @@
             <p>Started: {{item.createdat}}</p>
             <p>Lot No.: <strong>{{item.id}}</strong></p>
             <div class="product-status">Status: <strong>{{item.status}}</strong></div>
-            <div class="btn-div">
-                <a class="bid-btn" href="{% url 'auctions:bidItem' auction.id item.id %}?page={{pageOptions.page}}">
-                    {{pageOptions.buttonLabel}}
-                </a>
+            <div class="item-flex">
+                {% if pageOptions.page == 'auctionIndex' %}
+                <div class="btn-div_">
+                    <a class="bid-btn" href="{% url 'auctions:editItem' auction.id item.id %}?page={{pageOptions.page}}">
+                        Edit
+                    </a>
+                </div>
+                {% endif %}
+                <div class="btn-div_">
+                    <a class="bid-btn" href="{% url 'auctions:bidItem' auction.id item.id %}?page={{pageOptions.page}}">
+                        {{pageOptions.buttonLabel}}
+                    </a>
+                </div>
             </div>
             <img src="{{item.image}}" alt="{{item.name}}" />
         </div>

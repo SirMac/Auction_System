@@ -14,6 +14,7 @@ urlpatterns = [
     path('auction/<int:aid>/participant/<int:pid>/edit', views.editParticipant, name='editParticipant'),
     path('auction/<int:aid>/participant/<int:pid>/delete', views.deleteParticipant, name='deleteParticipant'),
     path('auction/<int:id>/item/add', views.addItem, name='addItem'),
+    path('auction/<int:aid>/item/<int:itemid>/edit', views.editItem, name='editItem'),
     path('auction/<int:aid>/item/<int:itemid>/bid', views.bidItem, name='bidItem'),
     path('auction/<int:aid>/item/<int:itemid>/bid-detail', views.getBidDetail, name='getBidDetail'),
     path('auction/<int:aid>/sold-items', views.getSoldItems, name='getSoldItems'),
