@@ -154,7 +154,7 @@ def addNewItem(req, id):
         endat = endate
     )
     newItem.save()
-    success(request=req, message=f'Item "{name}" successfully added to auction "{id}"')
+    success(request=req, message=f'Item "{name}" successfully added to auction')
     return redirect('auctions:auctionIndex', id=id)
 
 

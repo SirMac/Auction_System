@@ -4,6 +4,7 @@
 
 {% block content %}
 <section class="section__container product__container" id="product">
+    {% if auction %}
     <div class="auctionbase__header">
         <a href="{% url 'auctions:auctionIndex' auction.id %}">
             <h3>{{auction.name}}</h3>
@@ -14,7 +15,6 @@
     </div>
     <nav>
         <ul class="nav__links auction__nav__links" id="nav-links">
-            {% if auction %}
                 {% with current_url=request.get_full_path %}
                     {% url 'auctions:auctionIndex' auction.id as url %}
                     <li class="{% if current_url == url %} active-menu {%endif%}">
@@ -41,10 +41,14 @@
                         <a href="{{ url }}">Sold Items</a>
                     </li>
                 {% endwith %}
-            {% endif %}
         </ul>
     </nav>
     {% include "auctions/message.html" %}
     {% block auction_content %}{% endblock %}
+
+    {% else %}
+        <div class="auction-notice">Auction not found</div>
+    {% endif %}
+
 </section>
 {% endblock %}

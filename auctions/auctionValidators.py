@@ -130,16 +130,16 @@ class ValidateAddParticipant(ValidateAuctionBase):
   def __init__(self, req, id):
     super().__init__()
     userId = req.POST.get('username')
-    self.validateDuplicateUsername(userId)
+    self.validateDuplicateUsername(userId, id)
     self.validateNumberOfParticipants(id)
     self.validateEditByOwner(req, id)
     self.validateAuctionStatus(id)
 
 
 
-  def validateDuplicateUsername(self, userId):
+  def validateDuplicateUsername(self, userId, id):
     try:
-      participant = Participant.objects.get(userid=userId, status='active')
+      participant = Participant.objects.get(auctionid=id, userid=userId, status='active')
     except:
       message = f'ValidateParticipant: Username with id "{userId}" does not exist'
       logging.error(message)
